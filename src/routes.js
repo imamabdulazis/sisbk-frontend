@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate, useRoutes } from "react-router";
+import { Navigate } from "react-router";
 //layout
 import DashboardLayout from "./layouts/dashboard";
 import LogoOnlyLayout from "./layouts/LogoOnlyLayout";
@@ -14,33 +14,35 @@ import NotFound from "./pages/Page404";
 
 // ----------------------------------------------------------------------
 
-function Router() {
-  return useRoutes([
-    {
-      path: "/dashboard",
-      element: <DashboardLayout />,
-      children: [
-        { path: "/", element: <Navigate to="/dashboard/app" replace /> },
-        { path: "app", element: <DashboardApp /> },
-        { path: "siswa", element: <User /> },
-        { path: "kontak", element: <Products /> },
-        { path: "materi", element: <Blog /> },
-      ],
-    },
-    {
-      path: "/",
-      element: <LogoOnlyLayout />,
-      children: [
-        { path: "login", element: <Login /> },
-        { path: "register", element: <Register /> },
-        { path: "404", element: <NotFound /> },
-        { path: "/", element: <Navigate to="/dashboard" /> },
-        { path: "*", element: <Navigate to="/404" /> },
-      ],
-    },
+const routes = (isLoggedIn) => [
+  {
+    path: "/app",
+    element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/login" />,
+    children: [
+      { path: "/", element: <Navigate to="/app/dashboard" replace /> },
+      { path: "dashboard", element: <DashboardApp /> },
+      { path: "siswa", element: <User /> },
+      { path: "kontak", element: <Products /> },
+      { path: "materi", element: <Blog /> },
+    ],
+  },
+  {
+    path: "/",
+    element: !isLoggedIn ? (
+      <LogoOnlyLayout />
+    ) : (
+      <Navigate to="/app/dashboard" />
+    ),
+    children: [
+      { path: "/", element: <Navigate to="/login" /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "404", element: <NotFound /> },
+      { path: "*", element: <Navigate to="/404" /> },
+    ],
+  },
 
-    { path: "*", element: <Navigate to="/404" replace /> },
-  ]);
-}
+  { path: "*", element: <Navigate to="/404" replace /> },
+];
 
-export default Router;
+export default routes;

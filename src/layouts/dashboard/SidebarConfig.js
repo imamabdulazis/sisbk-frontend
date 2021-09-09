@@ -13,32 +13,32 @@ const getIcon = (name) => <Icon icon={name} width={22} height={22} />;
 const sidebarConfig = [
   {
     title: 'dashboard',
-    path: '/dashboard/app',
+    path: '/app/dashboard',
     icon: getIcon(homeFill)
   },
   {
     title: 'siswa',
-    path: '/dashboard/siswa',
+    path: '/app/siswa',
     icon: getIcon(peopleFill)
   },
   {
     title: 'kontak',
-    path: '/dashboard/kontak',
+    path: '/app/kontak',
     icon: getIcon(phoneCallFill)
   },
   {
     title: 'materi',
-    path: '/dashboard/materi',
+    path: '/app/materi',
     icon: getIcon(bookOpenFill)
   },
   {
     title: 'forum',
-    path: '/dashboard/forum',
+    path: '/app/forum',
     icon: getIcon(messageCircleFill)
   },
   {
     title: 'tes',
-    path: '/dashboard/tes',
+    path: '/app/tes',
     icon: getIcon(fileTextFill)
   },
 ];
