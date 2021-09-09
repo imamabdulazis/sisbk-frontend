@@ -17,7 +17,7 @@ export const loginUser = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       let response = API.post("/api/user/login", data);
-      if ((await response).status == 200) {
+      if ((await response).status === 200) {
         localStorage.setItem("token", response.token);
         return (await response).data;
       } else {

@@ -11,6 +11,8 @@ import Products from "./pages/Products";
 import Blog from "./pages/Blog";
 import User from "./pages/User";
 import NotFound from "./pages/Page404";
+import Forum from "./pages/Forum";
+import TesPotensi from "./pages/TesPotensi";
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +26,8 @@ const routes = (isLoggedIn) => [
       { path: "siswa", element: <User /> },
       { path: "kontak", element: <Products /> },
       { path: "materi", element: <Blog /> },
+      { path: "forum", element: <Forum /> },
+      { path: "tes", element: <TesPotensi /> },
     ],
   },
   {

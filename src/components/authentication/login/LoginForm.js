@@ -45,7 +45,7 @@ export default function LoginForm() {
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: "devopsimunsdfdsf@gmail.com",
       password: "",
       remember: true,
     },
