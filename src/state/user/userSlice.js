@@ -4,10 +4,16 @@ import API from "../../api/apiHandler";
 export const signupUser = createAsyncThunk(
   "users/signupUsers",
   async (data, thunkAPI) => {
+    let response = API.post("/api/user/signup", data);
     try {
+      if ((await response).status === 200) {
+        return (await response).data;
+      } else {
+        return thunkAPI.rejectWithValue(data);
+      }
     } catch (error) {
       console.log("Error :", error);
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
@@ -46,6 +52,7 @@ export const userSlice = createSlice({
       state.isFetching = false;
       state.isFetching = false;
       state.isSuccess = false;
+      state.isError = false;
       return state;
     },
   },
@@ -54,8 +61,6 @@ export const userSlice = createSlice({
       console.log(payload);
       state.isFetching = false;
       state.isSuccess = true;
-      state.email = payload.data.email;
-      state.username = payload.data.username;
     },
     [signupUser.pending]: (state) => {
       state.isFetching = true;

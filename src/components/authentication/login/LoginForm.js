@@ -45,7 +45,7 @@ export default function LoginForm() {
 
   const formik = useFormik({
     initialValues: {
-      email: "devopsimunsdfdsf@gmail.com",
+      email: "",
       password: "",
       remember: true,
     },
@@ -62,11 +62,11 @@ export default function LoginForm() {
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
     formik;
 
-  /**handling state */
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
 
+  /**handling state */
   const onSubmit = (data) => {
     dispatch(loginUser(data));
   };

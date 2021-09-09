@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import * as Yup from "yup";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
@@ -11,14 +12,29 @@ import {
   TextField,
   IconButton,
   InputAdornment,
+  FormControlLabel,
+  Switch,
 } from "@material-ui/core";
+import { withStyles } from "@material-ui/styles";
 import { LoadingButton } from "@material-ui/lab";
+//redux
+import { useDispatch, useSelector } from "react-redux";
+import {
+  userSelector,
+  clearState,
+  signupUser,
+} from "../../../state/user/userSlice";
+import toast from "react-hot-toast";
 
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [isTeacher, setisTeacher] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { isFetching, isSuccess, isError, errorMessage } =
+    useSelector(userSelector);
 
   const RegisterSchema = Yup.object().shape({
     name: Yup.string()
@@ -46,12 +62,101 @@ export default function RegisterForm() {
       password: "",
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate("/dashboard", { replace: true });
+    onSubmit: (values) => {
+      let data = {
+        name: values.name,
+        username: values.username,
+        email: values.email,
+        password: values.password,
+        address: values.address,
+        previlage: isTeacher ? "Guru" : "Siswa",
+      };
+      onSubmit(data);
     },
   });
-
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+
+  const handleChange = (event) => {
+    setisTeacher(event.target.checked);
+  };
+
+  /**handling state */
+  const onSubmit = (data) => {
+    dispatch(clearState());
+    dispatch(signupUser(data));
+  };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearState());
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(errorMessage);
+      dispatch(clearState());
+    }
+
+    if (isSuccess) {
+      dispatch(clearState());
+      toast.success("Daftar berhasil Berhasil");
+      navigate("/login", { replace: true });
+    }
+  }, [isError, isSuccess]);
+
+  const IOSSwitch = withStyles((theme) => ({
+    root: {
+      width: 42,
+      height: 26,
+      padding: 0,
+      margin: theme.spacing(1),
+    },
+    switchBase: {
+      padding: 1,
+      "&$checked": {
+        transform: "translateX(16px)",
+        color: theme.palette.common.white,
+        "& + $track": {
+          backgroundColor: "#52d869",
+          opacity: 1,
+          border: "none",
+        },
+      },
+      "&$focusVisible $thumb": {
+        color: "#52d869",
+        border: "6px solid #fff",
+      },
+    },
+    thumb: {
+      width: 24,
+      height: 24,
+    },
+    track: {
+      borderRadius: 26 / 2,
+      border: `1px solid ${theme.palette.grey[400]}`,
+      backgroundColor: theme.palette.grey[50],
+      opacity: 1,
+      transition: theme.transitions.create(["background-color", "border"]),
+    },
+    checked: {},
+    focusVisible: {},
+  }))(({ classes, ...props }) => {
+    return (
+      <Switch
+        focusVisibleClassName={classes.focusVisible}
+        disableRipple
+        classes={{
+          root: classes.root,
+          switchBase: classes.switchBase,
+          thumb: classes.thumb,
+          track: classes.track,
+          checked: classes.checked,
+        }}
+        {...props}
+      />
+    );
+  });
 
   return (
     <FormikProvider value={formik}>
@@ -116,13 +221,24 @@ export default function RegisterForm() {
             error={Boolean(touched.password && errors.password)}
             helperText={touched.password && errors.password}
           />
+          <FormControlLabel
+            control={
+              <IOSSwitch
+                checked={isTeacher}
+                {...getFieldProps("previlage")}
+                name="checkedB"
+                onChange={handleChange}
+              />
+            }
+            label="Daftar Sebagai Guru"
+          />
 
           <LoadingButton
             fullWidth
             size="large"
             type="submit"
             variant="contained"
-            loading={isSubmitting}
+            loading={isFetching}
           >
             Register
           </LoadingButton>
