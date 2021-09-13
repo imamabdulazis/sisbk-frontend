@@ -17,8 +17,8 @@ const sidebarConfig = [
     icon: getIcon(homeFill)
   },
   {
-    title: 'siswa',
-    path: '/app/siswa',
+    title: 'user',
+    path: '/app/user',
     icon: getIcon(peopleFill)
   },
   {

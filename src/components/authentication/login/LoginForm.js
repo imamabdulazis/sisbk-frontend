@@ -140,9 +140,9 @@ export default function LoginForm() {
             label="ingat saya"
           />
 
-          <Link component={RouterLink} variant="subtitle2" to="#">
+          {/* <Link component={RouterLink} variant="subtitle2" to="#">
             Lupa password?
-          </Link>
+          </Link> */}
         </Stack>
 
         <LoadingButton

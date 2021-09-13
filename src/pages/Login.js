@@ -76,7 +76,7 @@ export default function Login() {
               Masukan identitas login.
             </Typography>
           </Stack>
-          <AuthSocial />
+          {/* <AuthSocial /> */}
 
           <LoginForm />
 

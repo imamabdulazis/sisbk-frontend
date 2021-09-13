@@ -1,9 +1,9 @@
-import { filter } from 'lodash';
-import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
-import { useState } from 'react';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink } from 'react-router-dom';
+import { filter } from "lodash";
+import { Icon } from "@iconify/react";
+import { sentenceCase } from "change-case";
+import { useEffect, useState } from "react";
+import plusFill from "@iconify/icons-eva/plus-fill";
+import { Link as RouterLink } from "react-router-dom";
 // material
 import {
   Card,
@@ -18,26 +18,37 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination
-} from '@material-ui/core';
+  TablePagination,
+} from "@material-ui/core";
 // components
-import Page from '../components/Page';
-import Label from '../components/Label';
-import Scrollbar from '../components/Scrollbar';
-import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dashboard/user';
+import Page from "../components/Page";
+import Label from "../components/Label";
+import Scrollbar from "../components/Scrollbar";
+import SearchNotFound from "../components/SearchNotFound";
+import {
+  UserListHead,
+  UserListToolbar,
+  UserMoreMenu,
+} from "../components/_dashboard/user";
 //
-import USERLIST from '../_mocks_/user';
+//REDUX
+import { useSelector, useDispatch } from "react-redux";
+import {
+  userSelector,
+  clearState,
+  fetchAllUser,
+} from "../state/user/userSlice";
+
+// import USERLIST from "../_mocks_/user";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' }
+  { id: "name", label: "Nama", alignRight: false },
+  { id: "email", label: "Email", alignRight: false },
+  { id: "address", label: "Alamat", alignRight: false },
+  { id: "previlage", label: "Role", alignRight: false },
+  { id: "previlage", label: "Status", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -53,7 +64,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -66,28 +77,39 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(
+      array,
+      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
 export default function User() {
+  const dispatch = useDispatch();
   const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
+  const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('name');
-  const [filterName, setFilterName] = useState('');
+  const [orderBy, setOrderBy] = useState("name");
+  const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const { isFetching, isSuccess, allUser, isError, errorMessage } =
+    useSelector(userSelector);
+
+  useEffect(() => {
+    dispatch(fetchAllUser());
+  }, [isSuccess, isError]);
+
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = allUser.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -125,16 +147,26 @@ export default function User() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - allUser.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(
+    allUser,
+    getComparator(order, orderBy),
+    filterName
+  );
 
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
     <Page title="User">
       <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={5}
+        >
           <Typography variant="h4" gutterBottom>
             User
           </Typography>
@@ -162,7 +194,7 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={allUser.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -171,7 +203,15 @@ export default function User() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                      const {
+                        id,
+                        name,
+                        role,
+                        email,
+                        address,
+                        image_url,
+                        previlage,
+                      } = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
 
                       return (
@@ -190,24 +230,33 @@ export default function User() {
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={avatarUrl} />
+                            <Stack
+                              direction="row"
+                              alignItems="center"
+                              spacing={2}
+                            >
+                              <Avatar alt={name} src={image_url} />
                               <Typography variant="subtitle2" noWrap>
                                 {name}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
-                          <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                          <TableCell align="left">
+                          <TableCell align="left">{email}</TableCell>
+                          <TableCell align="left">{address}</TableCell>
+                          <TableCell align="left">{previlage}</TableCell>
+                          {/* <TableCell align="left">
+                            {isVerified ? "Yes" : "No"}
+                          </TableCell> */}
+                          {/* <TableCell align="left">
                             <Label
                               variant="ghost"
-                              color={(status === 'banned' && 'error') || 'success'}
+                              color={
+                                (status === "banned" && "error") || "success"
+                              }
                             >
                               {sentenceCase(status)}
                             </Label>
-                          </TableCell>
+                          </TableCell> */}
 
                           <TableCell align="right">
                             <UserMoreMenu />
@@ -237,7 +286,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={allUser.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

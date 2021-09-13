@@ -13,6 +13,7 @@ import User from "./pages/User";
 import NotFound from "./pages/Page404";
 import Forum from "./pages/Forum";
 import TesPotensi from "./pages/TesPotensi";
+import EditUser from "./pages/edit/EditUser";
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +24,8 @@ const routes = (isLoggedIn) => [
     children: [
       { path: "/", element: <Navigate to="/app/dashboard" replace /> },
       { path: "dashboard", element: <DashboardApp /> },
-      { path: "siswa", element: <User /> },
+      { path: "user", element: <User /> },
+      { path: "user/edit", element: <EditUser /> },
       { path: "kontak", element: <Products /> },
       { path: "materi", element: <Blog /> },
       { path: "forum", element: <Forum /> },
