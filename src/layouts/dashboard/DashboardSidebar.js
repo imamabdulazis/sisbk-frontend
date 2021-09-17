@@ -18,7 +18,7 @@ import Scrollbar from "../../components/Scrollbar";
 import NavSection from "../../components/NavSection";
 import { MHidden } from "../../components/@material-extend";
 //
-import sidebarConfig from "./SidebarConfig";
+import { sidebarConfigStudent, sidebarConfigTeacher } from "./SidebarConfig";
 
 /**redux */
 import { useDispatch, useSelector } from "react-redux";
@@ -105,7 +105,13 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         </Link>
       </Box>
 
-      <NavSection navConfig={sidebarConfig} />
+      <NavSection
+        navConfig={
+          localStorage.getItem("role") == "Guru"
+            ? sidebarConfigTeacher
+            : sidebarConfigStudent
+        }
+      />
 
       <Box sx={{ flexGrow: 1 }} />
 

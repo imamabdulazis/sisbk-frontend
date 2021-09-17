@@ -30,14 +30,14 @@ import {
   userSelector,
   clearState,
   updateUserById,
+  signupUser,
 } from "../../state/user/userSlice";
 import toast from "react-hot-toast";
 
-function EditUser() {
+function AddUser() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { state } = useLocation();
-  const [isChangePassword, setisChangePassword] = useState(false);
+  const [isTeacher, setisTeacher] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { isFetching, isSuccess, isError, errorMessage } =
     useSelector(userSelector);
@@ -54,52 +54,42 @@ function EditUser() {
     email: Yup.string()
       .email("Email harus berupa alamat email yang valid")
       .required("Email wajib di isi"),
+    password: Yup.string()
+      .min(4, "Terlalu pendek")
+      .required("Password wajib di isi"),
   });
 
   const formik = useFormik({
     initialValues: {
-      name: state.name,
-      username: state.username,
-      email: state.email,
-      address: state.address,
+      name: "",
+      username: "",
+      email: "",
+      address: "",
       password: "",
     },
     validationSchema: RegisterSchema,
     onSubmit: (values) => {
-      if (isChangePassword) {
-        let data = {
-          name: values.name,
-          username: values.username,
-          email: values.email,
-          password: values.password,
-          previlage: state.previlage,
-          address: values.address,
-          is_change_password: true,
-        };
-        onSubmit(data);
-      } else {
-        let data = {
-          name: values.name,
-          username: values.username,
-          email: values.email,
-          address: values.address,
-          previlage: state.previlage,
-          is_change_password: false,
-        };
-        onSubmit(data);
-      }
+      let data = {
+        name: values.name,
+        username: values.username,
+        email: values.email,
+        password: values.password,
+        address: values.address,
+        previlage: isTeacher ? "Guru" : "Siswa",
+      };
+      onSubmit(data);
     },
   });
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   /**handling state */
   const handleChange = (event) => {
-    setisChangePassword(event.target.checked);
+    setisTeacher(event.target.checked);
   };
 
   const onSubmit = (data) => {
     dispatch(clearState());
-    dispatch(updateUserById({ id: state.id, data: data }));
+    dispatch(signupUser(data));
   };
 
   useEffect(() => {
@@ -116,7 +106,7 @@ function EditUser() {
 
     if (isSuccess) {
       dispatch(clearState());
-      toast.success("Update User Berhasil");
+      toast.success("Tambah User Berhasil");
       navigate("/app/user", { replace: true });
     }
   }, [isError, isSuccess]);
@@ -231,43 +221,39 @@ function EditUser() {
                     helperText={touched.address && errors.address}
                   />
 
+                  <TextField
+                    fullWidth
+                    autoComplete="current-password"
+                    type={showPassword ? "text" : "password"}
+                    label="Password"
+                    {...getFieldProps("password")}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            edge="end"
+                            onClick={() => setShowPassword((prev) => !prev)}
+                          >
+                            <Icon icon={showPassword ? eyeFill : eyeOffFill} />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    error={Boolean(touched.password && errors.password)}
+                    helperText={touched.password && errors.password}
+                  />
+
                   <FormControlLabel
                     control={
                       <IOSSwitch
-                        checked={isChangePassword}
+                        checked={isTeacher}
                         {...getFieldProps("previlage")}
                         name="checkedB"
                         onChange={handleChange}
                       />
                     }
-                    label="Ganti password?"
+                    label="Daftar sebagai guru?"
                   />
-
-                  {isChangePassword && (
-                    <TextField
-                      fullWidth
-                      autoComplete="current-password"
-                      type={showPassword ? "text" : "password"}
-                      label="Password"
-                      {...getFieldProps("password")}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              edge="end"
-                              onClick={() => setShowPassword((prev) => !prev)}
-                            >
-                              <Icon
-                                icon={showPassword ? eyeFill : eyeOffFill}
-                              />
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      error={Boolean(touched.password && errors.password)}
-                      helperText={touched.password && errors.password}
-                    />
-                  )}
 
                   <LoadingButton
                     fullWidth
@@ -289,4 +275,4 @@ function EditUser() {
   );
 }
 
-export default EditUser;
+export default AddUser;

@@ -43,7 +43,7 @@ export default function Register() {
   return (
     <RootStyle title="Register">
       <AuthLayout>
-        Sudah sudah punya akun? &nbsp;
+        Sudah punya akun? &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to="/login">
           Login
         </Link>

@@ -24,11 +24,11 @@ export default function AuthSocial() {
         </Button> */}
       </Stack>
 
-      <Divider sx={{ my: 3 }}>
+      {/* <Divider sx={{ my: 3 }}>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           atau
         </Typography>
-      </Divider>
+      </Divider> */}
     </>
   );
 }

@@ -14,22 +14,50 @@ import NotFound from "./pages/Page404";
 import Forum from "./pages/Forum";
 import TesPotensi from "./pages/TesPotensi";
 import EditUser from "./pages/edit/EditUser";
+import AddUser from "./pages/add/AddUser";
+import TestStudent from "./pages/student/TestStudent";
+import Beranda from "./pages/student/Beranda";
+import KontakStudent from "./pages/student/KontakStudent";
+import MateriStudent from "./pages/student/MateriStudent";
+import Materi from "./pages/Materi";
+import Kontak from "./pages/Kontak";
+import Profile from "./pages/Profile";
+import Setting from "./pages/Setting";
 
 // ----------------------------------------------------------------------
 
-const routes = (isLoggedIn) => [
+const routes = (isLoggedIn, isTeacher) => [
   {
     path: "/app",
     element: isLoggedIn ? <DashboardLayout /> : <Navigate to="/login" />,
     children: [
-      { path: "/", element: <Navigate to="/app/dashboard" replace /> },
+      {
+        path: "/",
+        element: (
+          <Navigate
+            to={isTeacher ? "/app/dashboard" : "/app/beranda"}
+            replace
+          />
+        ),
+      },
       { path: "dashboard", element: <DashboardApp /> },
       { path: "user", element: <User /> },
       { path: "user/edit", element: <EditUser /> },
-      { path: "kontak", element: <Products /> },
-      { path: "materi", element: <Blog /> },
+      { path: "user/add", element: <AddUser /> },
+      { path: "kontak", element: <Kontak /> },
+      { path: "materi", element: <Materi /> },
       { path: "forum", element: <Forum /> },
       { path: "tes", element: <TesPotensi /> },
+
+      // siswa
+      { path: "beranda", element: <Blog /> },
+      { path: "materi_siswa", element: <MateriStudent /> },
+      { path: "kontak_siswa", element: <Products /> },
+      { path: "tes_siswa", element: <TestStudent /> },
+
+      //profile
+      { path: "profile", element: <Profile /> },
+      { path: "setting", element: <Setting /> },
     ],
   },
   {
@@ -37,7 +65,7 @@ const routes = (isLoggedIn) => [
     element: !isLoggedIn ? (
       <LogoOnlyLayout />
     ) : (
-      <Navigate to="/app/dashboard" />
+      <Navigate to={isTeacher ? "/app/dashboard" : "/app/beranda"} />
     ),
     children: [
       { path: "/", element: <Navigate to="/login" /> },

@@ -25,19 +25,14 @@ import { useNavigate } from "react-router";
 
 const MENU_OPTIONS = [
   {
-    label: "Home",
-    icon: homeFill,
-    linkTo: "/",
-  },
-  {
     label: "Profile",
     icon: personFill,
-    linkTo: "#",
+    linkTo: "/app/profile",
   },
   {
     label: "Settings",
     icon: settings2Fill,
-    linkTo: "#",
+    linkTo: "/app/setting",
   },
 ];
 

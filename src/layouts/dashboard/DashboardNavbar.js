@@ -56,7 +56,7 @@ export default function DashboardNavbar({ onOpenSidebar }) {
           </IconButton>
         </MHidden>
 
-        <Searchbar goSearch={goSearch} />
+        {/* <Searchbar goSearch={goSearch} /> */}
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack
@@ -64,7 +64,7 @@ export default function DashboardNavbar({ onOpenSidebar }) {
           alignItems="center"
           spacing={{ xs: 0.5, sm: 1.5 }}
         >
-          <NotificationsPopover />
+          {/* <NotificationsPopover /> */}
           <AccountPopover />
         </Stack>
       </ToolbarStyle>

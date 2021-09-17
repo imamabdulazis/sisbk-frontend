@@ -100,7 +100,7 @@ export default function RegisterForm() {
 
     if (isSuccess) {
       dispatch(clearState());
-      toast.success("Daftar berhasil Berhasil");
+      toast.success("Daftar akun baru berhasil");
       navigate("/login", { replace: true });
     }
   }, [isError, isSuccess]);
