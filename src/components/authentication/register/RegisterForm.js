@@ -94,14 +94,15 @@ export default function RegisterForm() {
 
   useEffect(() => {
     if (isError) {
-      toast.error(errorMessage);
+      toast.error(errorMessage??"Internal Server Error");
       dispatch(clearState());
     }
 
     if (isSuccess) {
+      navigate("/login", { replace: true });
+      window.location.reload();
       dispatch(clearState());
       toast.success("Daftar akun baru berhasil");
-      navigate("/login", { replace: true });
     }
   }, [isError, isSuccess]);
 

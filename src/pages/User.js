@@ -272,7 +272,11 @@ export default function User() {
                           </TableCell> */}
 
                           <TableCell align="right">
-                            <UserMoreMenu item={row} onDelete={onDelete} />
+                            <UserMoreMenu
+                              route={"/app/user/edit"}
+                              item={row}
+                              onDelete={onDelete}
+                            />
                           </TableCell>
                         </TableRow>
                       );

@@ -22,14 +22,14 @@ export const sidebarConfigTeacher = [
     icon: getIcon(peopleFill),
   },
   {
-    title: "kontak",
-    path: "/app/kontak",
-    icon: getIcon(phoneCallFill),
-  },
-  {
     title: "materi",
     path: "/app/materi",
     icon: getIcon(bookOpenFill),
+  },
+  {
+    title: "kontak",
+    path: "/app/kontak",
+    icon: getIcon(phoneCallFill),
   },
   {
     title: "forum",

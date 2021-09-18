@@ -86,6 +86,7 @@ export default function LoginForm() {
     if (isSuccess) {
       dispatch(clearState());
       toast.success("Login Berhasil");
+      window.location.reload();
       navigate("/app/dashboard", { replace: true });
     }
   }, [isError, isSuccess]);

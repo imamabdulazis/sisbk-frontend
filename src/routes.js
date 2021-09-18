@@ -23,6 +23,10 @@ import Materi from "./pages/Materi";
 import Kontak from "./pages/Kontak";
 import Profile from "./pages/Profile";
 import Setting from "./pages/Setting";
+import AddContact from "./pages/add/AddContact";
+import EditContact from "./pages/edit/EditContact";
+import AddMateri from "./pages/add/AddContact";
+import EditMateri from "./pages/edit/EditMateri";
 
 // ----------------------------------------------------------------------
 
@@ -42,12 +46,20 @@ const routes = (isLoggedIn, isTeacher) => [
       },
       { path: "dashboard", element: <DashboardApp /> },
       { path: "user", element: <User /> },
-      { path: "user/edit", element: <EditUser /> },
-      { path: "user/add", element: <AddUser /> },
       { path: "kontak", element: <Kontak /> },
       { path: "materi", element: <Materi /> },
       { path: "forum", element: <Forum /> },
       { path: "tes", element: <TesPotensi /> },
+
+      //CRUD
+      { path: "user/add", element: <AddUser /> },
+      { path: "user/edit", element: <EditUser /> },
+
+      { path: "materi/add", element: <AddMateri /> },
+      { path: "materi/edit", element: <EditMateri /> },
+
+      { path: "contact/add", element: <AddContact /> },
+      { path: "contact/edit", element: <EditContact /> },
 
       // siswa
       { path: "beranda", element: <Blog /> },

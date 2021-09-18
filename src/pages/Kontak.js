@@ -33,24 +33,22 @@ import {
 //
 //REDUX
 import { useSelector, useDispatch } from "react-redux";
-import {
-  userSelector,
-  clearState,
-  fetchAllUser,
-  deleteUserById,
-} from "../state/user/userSlice";
 import toast from "react-hot-toast";
-
-// import USERLIST from "../_mocks_/user";
+import {
+  contactSelector,
+  fetchAllContact,
+  deleteContactByID,
+} from "../state/contact/contactSlice";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: "name", label: "Nama", alignRight: false },
   { id: "email", label: "Email", alignRight: false },
+  { id: "phone", label: "No Telepon", alignRight: false },
   { id: "address", label: "Alamat", alignRight: false },
-  { id: "previlage", label: "Role", alignRight: false },
-  { id: "previlage", label: "Status", alignRight: false },
+  { id: "job_desc", label: "Job Desk", alignRight: false },
+  { id: "edu_title", label: "Gelar", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -98,17 +96,17 @@ export default function Kontak() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const {
-    isFetching,
-    isSuccessDelete,
-    isSuccess,
-    allUser,
-    isError,
-    errorMessage,
-  } = useSelector(userSelector);
+    contacts,
+    isFetchingContact,
+    isSuccessContact,
+    isSuccessDeleteContact,
+    isErrorContact,
+    errorMessageContact,
+  } = useSelector(contactSelector);
 
   useEffect(() => {
-    dispatch(fetchAllUser());
-  }, [isSuccess, isError]);
+    dispatch(fetchAllContact());
+  }, [isSuccessContact, isErrorContact]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -118,7 +116,7 @@ export default function Kontak() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = allUser.map((n) => n.name);
+      const newSelecteds = contacts.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -157,10 +155,10 @@ export default function Kontak() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - allUser.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - contacts.length) : 0;
 
   const filteredUsers = applySortFilter(
-    allUser,
+    contacts,
     getComparator(order, orderBy),
     filterName
   );
@@ -168,18 +166,18 @@ export default function Kontak() {
   const isUserNotFound = filteredUsers.length === 0;
 
   const onDelete = (item) => {
-    dispatch(deleteUserById(item.id));
+    dispatch(deleteContactByID(item.id));
   };
 
   useEffect(() => {
-    if (isSuccessDelete) {
+    if (isSuccessDeleteContact) {
       toast.success("Berhasil hapus");
       window.location.reload();
     }
-  }, [isSuccessDelete]);
+  }, [isSuccessDeleteContact]);
 
   return (
-    <Page title="User">
+    <Page title="Guru">
       <Container>
         <Stack
           direction="row"
@@ -188,12 +186,12 @@ export default function Kontak() {
           mb={5}
         >
           <Typography variant="h4" gutterBottom>
-            User
+            Kontak Guru
           </Typography>
           <Button
             variant="contained"
             component={RouterLink}
-            to="/app/user/add"
+            to="/app/contact/add"
             startIcon={<Icon icon={plusFill} />}
           >
             Tambah
@@ -214,7 +212,7 @@ export default function Kontak() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={allUser.length}
+                  rowCount={contacts.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -223,8 +221,16 @@ export default function Kontak() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, email, address, image_url, previlage } =
-                        row;
+                      const {
+                        id,
+                        name,
+                        email,
+                        address,
+                        image_url,
+                        phone,
+                        job_desc,
+                        edu_title,
+                      } = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
 
                       return (
@@ -255,24 +261,13 @@ export default function Kontak() {
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{email}</TableCell>
+                          <TableCell align="left">{phone}</TableCell>
                           <TableCell align="left">{address}</TableCell>
-                          <TableCell align="left">{previlage}</TableCell>
-                          {/* <TableCell align="left">
-                            {isVerified ? "Yes" : "No"}
-                          </TableCell> */}
-                          {/* <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={
-                                (status === "banned" && "error") || "success"
-                              }
-                            >
-                              {sentenceCase(status)}
-                            </Label>
-                          </TableCell> */}
+                          <TableCell align="left">{job_desc}</TableCell>
+                          <TableCell align="left">{edu_title}</TableCell>
 
                           <TableCell align="right">
-                            <UserMoreMenu item={row} onDelete={onDelete} />
+                            <UserMoreMenu route={"/app/contact/edit"} item={row} onDelete={onDelete} />
                           </TableCell>
                         </TableRow>
                       );
@@ -299,7 +294,7 @@ export default function Kontak() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={allUser.length}
+            count={contacts.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

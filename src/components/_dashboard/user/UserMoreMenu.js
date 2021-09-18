@@ -53,7 +53,7 @@ export default function UserMoreMenu(props) {
 
         <MenuItem
           onClick={() => {
-            navigate("/app/user/edit", { state: props.item });
+            navigate(props.route, { state: props.item });
           }}
           sx={{ color: "text.secondary" }}
         >

@@ -184,7 +184,7 @@ function EditUser() {
           mb={5}
         >
           <Typography variant="h4" gutterBottom>
-            User
+            Edit User
           </Typography>
         </Stack>
         <Card>

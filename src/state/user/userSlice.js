@@ -4,10 +4,10 @@ import API from "../../api/apiHandler";
 export const signupUser = createAsyncThunk(
   "USER_SIGNUP",
   async (data, thunkAPI) => {
-    let response = API.post("/api/user/signup", data);
     try {
+      let response = API.post("/api/user/signup", data);
       if ((await response).status === 200) {
-        console.info((await response).data);
+        // console.info((await response).data);
         return (await response).data;
       } else {
         return thunkAPI.rejectWithValue(data);
@@ -24,7 +24,7 @@ export const loginUser = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       let response = API.post("/api/user/login", data);
-      console.info("RESPONSE", (await response).data);
+      // console.info("RESPONSE", (await response).data);
       if ((await response).status === 200) {
         localStorage.setItem("token", (await response).data.token);
         localStorage.setItem("role", (await response).data.data.previlage);
@@ -159,7 +159,6 @@ export const userSlice = createSlice({
       state.isFetching = true;
     },
     [loginUser.rejected]: (state, { payload }) => {
-      console.log("payload", payload);
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload?.message;
