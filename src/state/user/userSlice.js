@@ -29,6 +29,7 @@ export const loginUser = createAsyncThunk(
         localStorage.setItem("token", (await response).data.token);
         localStorage.setItem("role", (await response).data.data.previlage);
         localStorage.setItem("user_id", (await response).data.data.id);
+        localStorage.setItem("user_name", (await response).data.data.name);
         return (await response).data;
       } else {
         return thunkAPI.rejectWithValue(data);

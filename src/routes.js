@@ -25,7 +25,7 @@ import Profile from "./pages/Profile";
 import Setting from "./pages/Setting";
 import AddContact from "./pages/add/AddContact";
 import EditContact from "./pages/edit/EditContact";
-import AddMateri from "./pages/add/AddContact";
+import AddMateri from "./pages/add/AddMateri";
 import EditMateri from "./pages/edit/EditMateri";
 
 // ----------------------------------------------------------------------

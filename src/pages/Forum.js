@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "@material-ui/system";
 import { useFormik } from "formik";
 import { useState } from "react";
@@ -36,11 +36,16 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
 
 function Forum() {
   const [goSearch, setgoSearch] = useState(false);
+  const [nameUser, setnameUser] = useState("");
+
+  useEffect(() => {
+    setnameUser(localStorage.getItem("user_name"));
+  }, []);
   return (
     <Page title="Dashboard: Products">
       <Container>
         <Card style={{ height: 650 }}>
-          <MainChat />
+          <MainChat name={nameUser} />
         </Card>
       </Container>
     </Page>

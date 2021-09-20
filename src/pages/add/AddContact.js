@@ -119,7 +119,7 @@ function AddContact() {
 
     if (isSuccessAddContact) {
       dispatch(clearStateContact());
-      toast.success("Tambah User Berhasil");
+      toast.success("Tambah Kontak Berhasil");
       navigate("/app/kontak", { replace: true });
     }
   }, [isErrorContact, isSuccessAddContact]);

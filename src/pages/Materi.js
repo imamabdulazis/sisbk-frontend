@@ -33,24 +33,23 @@ import {
 //
 //REDUX
 import { useSelector, useDispatch } from "react-redux";
-import {
-  userSelector,
-  clearState,
-  fetchAllUser,
-  deleteUserById,
-} from "../state/user/userSlice";
 import toast from "react-hot-toast";
+import {
+  deleteMateri,
+  getAllMateri,
+  materiSelector,
+} from "../state/materi/materiSlice";
+import moment from "moment";
 
 // import USERLIST from "../_mocks_/user";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "name", label: "Nama", alignRight: false },
-  { id: "email", label: "Email", alignRight: false },
-  { id: "address", label: "Alamat", alignRight: false },
-  { id: "previlage", label: "Role", alignRight: false },
-  { id: "previlage", label: "Status", alignRight: false },
+  { id: "title", label: "Title", alignRight: false },
+  { id: "users.name", label: "Penulis", alignRight: false },
+  // { id: "description", label: "Deskripsi", alignRight: false },
+  { id: "updated_at", label: "Update", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -98,17 +97,19 @@ export default function Materi() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const {
+    materis,
+    isSuccessUpdateMateri,
+    isSuccessAddMateri,
+    isSuccessDeleteMateri,
     isFetching,
-    isSuccessDelete,
-    isSuccess,
-    allUser,
-    isError,
+    isSuccessFetch,
+    isErrorFetch,
     errorMessage,
-  } = useSelector(userSelector);
+  } = useSelector(materiSelector);
 
   useEffect(() => {
-    dispatch(fetchAllUser());
-  }, [isSuccess, isError]);
+    dispatch(getAllMateri());
+  }, [isSuccessFetch, isErrorFetch]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -118,18 +119,18 @@ export default function Materi() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = allUser.map((n) => n.name);
+      const newSelecteds = materis.map((n) => n.title);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, title) => {
+    const selectedIndex = selected.indexOf(title);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, title);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -157,10 +158,10 @@ export default function Materi() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - allUser.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - materis.length) : 0;
 
   const filteredUsers = applySortFilter(
-    allUser,
+    materis,
     getComparator(order, orderBy),
     filterName
   );
@@ -168,15 +169,15 @@ export default function Materi() {
   const isUserNotFound = filteredUsers.length === 0;
 
   const onDelete = (item) => {
-    dispatch(deleteUserById(item.id));
+    dispatch(deleteMateri(item.id));
   };
 
   useEffect(() => {
-    if (isSuccessDelete) {
+    if (isSuccessDeleteMateri) {
       toast.success("Berhasil hapus");
       window.location.reload();
     }
-  }, [isSuccessDelete]);
+  }, [isSuccessDeleteMateri]);
 
   return (
     <Page title="User">
@@ -188,12 +189,12 @@ export default function Materi() {
           mb={5}
         >
           <Typography variant="h4" gutterBottom>
-            User
+            Materi
           </Typography>
           <Button
             variant="contained"
             component={RouterLink}
-            to="/app/user/add"
+            to="/app/materi/add"
             startIcon={<Icon icon={plusFill} />}
           >
             Tambah
@@ -214,7 +215,7 @@ export default function Materi() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={allUser.length}
+                  rowCount={materis.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -223,9 +224,8 @@ export default function Materi() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, email, address, image_url, previlage } =
-                        row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const { id, title, users, updated_at, thumbnail } = row;
+                      const isItemSelected = selected.indexOf(title) !== -1;
 
                       return (
                         <TableRow
@@ -237,10 +237,10 @@ export default function Materi() {
                           aria-checked={isItemSelected}
                         >
                           <TableCell padding="checkbox">
-                            <Checkbox
+                            {/* <Checkbox
                               checked={isItemSelected}
                               onChange={(event) => handleClick(event, name)}
-                            />
+                            /> */}
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack
@@ -248,15 +248,20 @@ export default function Materi() {
                               alignItems="center"
                               spacing={2}
                             >
-                              <Avatar alt={name} src={image_url} />
+                              <Avatar alt={title} src={thumbnail} />
                               <Typography variant="subtitle2" noWrap>
-                                {name}
+                                {title}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{email}</TableCell>
-                          <TableCell align="left">{address}</TableCell>
-                          <TableCell align="left">{previlage}</TableCell>
+                          <TableCell align="left">{users.name}</TableCell>
+                          {/* <TableCell align="left">{description}</TableCell> */}
+                          <TableCell align="left">
+                            {moment(updated_at, "DD-MM-YYYY").format(
+                              "DD MMM yyyy"
+                            )}
+                            {/* {`${updated_at} oke`} */}
+                          </TableCell>
                           {/* <TableCell align="left">
                             {isVerified ? "Yes" : "No"}
                           </TableCell> */}
@@ -272,7 +277,11 @@ export default function Materi() {
                           </TableCell> */}
 
                           <TableCell align="right">
-                            <UserMoreMenu item={row} onDelete={onDelete} />
+                            <UserMoreMenu
+                              route="/app/materi/edit"
+                              item={row}
+                              onDelete={onDelete}
+                            />
                           </TableCell>
                         </TableRow>
                       );
@@ -299,7 +308,7 @@ export default function Materi() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={allUser.length}
+            count={materis.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
