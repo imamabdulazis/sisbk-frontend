@@ -27,13 +27,22 @@ import saveFill from "@iconify/icons-eva/save-fill";
 import Page from "../../components/Page";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { addNewContact, clearStateContact, contactSelector } from "../../state/contact/contactSlice";
+import {
+  addNewContact,
+  clearStateContact,
+  contactSelector,
+} from "../../state/contact/contactSlice";
+import apiHandler from "../../api/apiHandler";
+import axios from "axios";
 
 function AddContact() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isTeacher, setisTeacher] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [fileState, setfileState] = useState(null);
+  const [fileUrl, setfileUrl] = useState(null);
+  const [loading, setloading] = useState(false);
   const {
     contacts,
     isFetchingContact,
@@ -84,6 +93,7 @@ function AddContact() {
         address: values.address,
         job_desc: values.job_desc,
         edu_title: values.edu_title,
+        image_url: fileUrl,
       };
       onSubmit(data);
     },
@@ -113,6 +123,47 @@ function AddContact() {
       navigate("/app/kontak", { replace: true });
     }
   }, [isErrorContact, isSuccessAddContact]);
+
+  const onChangeFile = (event) => {
+    setfileState(event.target.files[0]);
+    uploadImage(event.target.files[0]);
+  };
+
+  const uploadImage = (value) => {
+    setloading(true);
+    const url = " http://localhost:4000";
+    const formData = new FormData();
+    formData.append("file", value, value?.name);
+    formData.append("folder", "contact");
+    let headers = {
+      "Content-Type": "multipart/form-data",
+      Accept: "application/json",
+      Authorization: "Bearer " + window.localStorage.getItem("token"),
+    };
+    axios({
+      method: "POST",
+      url: `${url}/api/file`,
+      data: formData,
+      headers: headers,
+      timeout: 10000,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          setloading(false);
+          setfileUrl(res.data.url);
+          toast.success("Berhasil upload foto");
+        } else {
+          setloading(false);
+          setfileUrl(null);
+          toast.error("Gagal upload foto");
+        }
+      })
+      .catch((err) => {
+        setloading(false);
+        setfileUrl(null);
+        toast.error("Gagal upload foto");
+      });
+  };
 
   return (
     <Page title="User">
@@ -187,11 +238,31 @@ function AddContact() {
                     helperText={touched.address && errors.address}
                   />
 
+                  <label htmlFor="btn-upload">
+                    <input
+                      id="btn-upload"
+                      name="btn-upload"
+                      style={{ display: "none" }}
+                      type="file"
+                      onChange={onChangeFile}
+                    />
+                    <LoadingButton
+                      loading={loading}
+                      className="btn-choose"
+                      variant="outlined"
+                      component="span"
+                    >
+                      Choose Files
+                    </LoadingButton>
+                  </label>
+                  <span>{fileState?.name}</span>
+
                   <LoadingButton
                     fullWidth
                     size="large"
                     type="submit"
                     variant="contained"
+                    disabled={loading}
                     loading={isFetchingContact}
                     startIcon={<Icon icon={saveFill} />}
                   >

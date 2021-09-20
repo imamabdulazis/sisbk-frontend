@@ -192,7 +192,7 @@ export const userSlice = createSlice({
     [fetchAllUser.rejected]: (state, { payload }) => {
       state.isFetching = false;
       state.isError = true;
-      state.errorMessage = payload.message;
+      state.errorMessage = payload?.message;
     },
     [deleteUserById.fulfilled]: (state, { payload }) => {
       state.isSuccess = true;
@@ -207,7 +207,7 @@ export const userSlice = createSlice({
       state.isFetching = false;
       state.isError = true;
       state.isSuccessDelete = false;
-      state.errorMessage = payload.message;
+      state.errorMessage = payload?.message;
     },
     [updateUserById.fulfilled]: (state, { payload }) => {
       state.isSuccess = true;
@@ -220,7 +220,7 @@ export const userSlice = createSlice({
     [updateUserById.rejected]: (state, { payload }) => {
       state.isFetching = false;
       state.isError = true;
-      state.errorMessage = payload.message;
+      state.errorMessage = payload?.message;
     },
   },
 });

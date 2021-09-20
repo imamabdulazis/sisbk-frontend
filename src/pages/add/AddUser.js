@@ -33,12 +33,16 @@ import {
   signupUser,
 } from "../../state/user/userSlice";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 function AddUser() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isTeacher, setisTeacher] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [fileState, setfileState] = useState(null);
+  const [fileUrl, setfileUrl] = useState(null);
+  const [loading, setloading] = useState(false);
   const { isFetching, isSuccess, isError, errorMessage } =
     useSelector(userSelector);
 
@@ -76,6 +80,7 @@ function AddUser() {
         password: values.password,
         address: values.address,
         previlage: isTeacher ? "Guru" : "Siswa",
+        image_url: fileUrl,
       };
       onSubmit(data);
     },
@@ -110,6 +115,48 @@ function AddUser() {
       navigate("/app/user", { replace: true });
     }
   }, [isError, isSuccess]);
+
+  //FILE UPLOAD
+  const onChangeFile = (event) => {
+    setfileState(event.target.files[0]);
+    uploadImage(event.target.files[0]);
+  };
+
+  const uploadImage = (value) => {
+    setloading(true);
+    const url = " http://localhost:4000";
+    const formData = new FormData();
+    formData.append("file", value, value?.name);
+    formData.append("folder", "users");
+    let headers = {
+      "Content-Type": "multipart/form-data",
+      Accept: "application/json",
+      Authorization: "Bearer " + window.localStorage.getItem("token"),
+    };
+    axios({
+      method: "POST",
+      url: `${url}/api/file`,
+      data: formData,
+      headers: headers,
+      timeout: 10000,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          setloading(false);
+          setfileUrl(res.data.url);
+          toast.success("Berhasil upload foto");
+        } else {
+          setloading(false);
+          setfileUrl(null);
+          toast.error("Gagal upload foto");
+        }
+      })
+      .catch((err) => {
+        setloading(false);
+        setfileUrl(null);
+        toast.error("Gagal upload foto");
+      });
+  };
 
   const IOSSwitch = withStyles((theme) => ({
     root: {
@@ -243,6 +290,24 @@ function AddUser() {
                     helperText={touched.password && errors.password}
                   />
 
+                  <label htmlFor="btn-upload">
+                    <input
+                      id="btn-upload"
+                      name="btn-upload"
+                      style={{ display: "none" }}
+                      type="file"
+                      onChange={onChangeFile}
+                    />
+                    <LoadingButton
+                      loading={loading}
+                      className="btn-choose"
+                      variant="outlined"
+                      component="span"
+                    >
+                      Choose Files
+                    </LoadingButton>
+                  </label>
+                  <span>{fileState?.name}</span>
                   <FormControlLabel
                     control={
                       <IOSSwitch
@@ -260,6 +325,7 @@ function AddUser() {
                     size="large"
                     type="submit"
                     variant="contained"
+                    disabled={loading}
                     loading={isFetching}
                     startIcon={<Icon icon={saveFill} />}
                   >

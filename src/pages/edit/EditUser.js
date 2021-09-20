@@ -32,11 +32,15 @@ import {
   updateUserById,
 } from "../../state/user/userSlice";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 function EditUser() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { state } = useLocation();
+  const [fileState, setfileState] = useState(null);
+  const [fileUrl, setfileUrl] = useState(null);
+  const [loading, setloading] = useState(false);
   const [isChangePassword, setisChangePassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { isFetching, isSuccess, isError, errorMessage } =
@@ -85,6 +89,7 @@ function EditUser() {
           address: values.address,
           previlage: state.previlage,
           is_change_password: false,
+          image_url: fileUrl,
         };
         onSubmit(data);
       }
@@ -174,6 +179,48 @@ function EditUser() {
     );
   });
 
+  //FILE UPLOAD
+  const onChangeFile = (event) => {
+    setfileState(event.target.files[0]);
+    uploadImage(event.target.files[0]);
+  };
+
+  const uploadImage = (value) => {
+    setloading(true);
+    const url = " http://localhost:4000";
+    const formData = new FormData();
+    formData.append("file", value, value?.name);
+    formData.append("folder", "users");
+    let headers = {
+      "Content-Type": "multipart/form-data",
+      Accept: "application/json",
+      Authorization: "Bearer " + window.localStorage.getItem("token"),
+    };
+    axios({
+      method: "POST",
+      url: `${url}/api/file`,
+      data: formData,
+      headers: headers,
+      timeout: 10000,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          setloading(false);
+          setfileUrl(res.data.url);
+          toast.success("Berhasil upload foto");
+        } else {
+          setloading(false);
+          setfileUrl(null);
+          toast.error("Gagal upload foto");
+        }
+      })
+      .catch((err) => {
+        setloading(false);
+        setfileUrl(null);
+        toast.error("Gagal upload foto");
+      });
+  };
+
   return (
     <Page title="User">
       <Container>
@@ -243,6 +290,25 @@ function EditUser() {
                     label="Ganti password?"
                   />
 
+                  <label htmlFor="btn-upload">
+                    <input
+                      id="btn-upload"
+                      name="btn-upload"
+                      style={{ display: "none" }}
+                      type="file"
+                      onChange={onChangeFile}
+                    />
+                    <LoadingButton
+                      loading={loading}
+                      className="btn-choose"
+                      variant="outlined"
+                      component="span"
+                    >
+                      Choose Files
+                    </LoadingButton>
+                  </label>
+                  <span>{fileState?.name}</span>
+
                   {isChangePassword && (
                     <TextField
                       fullWidth
@@ -274,6 +340,7 @@ function EditUser() {
                     size="large"
                     type="submit"
                     variant="contained"
+                    disabled={loading}
                     loading={isFetching}
                     startIcon={<Icon icon={saveFill} />}
                   >
