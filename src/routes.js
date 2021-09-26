@@ -27,6 +27,8 @@ import AddContact from "./pages/add/AddContact";
 import EditContact from "./pages/edit/EditContact";
 import AddMateri from "./pages/add/AddMateri";
 import EditMateri from "./pages/edit/EditMateri";
+import AllMateri from "./pages/student/AllMateri";
+import DetailMateri from "./pages/detail/DetailMateri";
 
 // ----------------------------------------------------------------------
 
@@ -62,14 +64,17 @@ const routes = (isLoggedIn, isTeacher) => [
       { path: "contact/edit", element: <EditContact /> },
 
       // siswa
-      { path: "beranda", element: <Blog /> },
+      { path: "beranda", element: <AllMateri /> },
       { path: "materi_siswa", element: <MateriStudent /> },
-      { path: "kontak_siswa", element: <Products /> },
+      { path: "kontak_siswa", element: <KontakStudent /> },
       { path: "tes_siswa", element: <TestStudent /> },
 
       //profile
       { path: "profile", element: <Profile /> },
       { path: "setting", element: <Setting /> },
+
+      //detail
+      { path: "detail_materi", element: <DetailMateri /> },
     ],
   },
   {

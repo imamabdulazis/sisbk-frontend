@@ -70,15 +70,106 @@ export const deleteMateri = createAsyncThunk(
   }
 );
 
+export const detailMateri = createAsyncThunk(
+  "DETAIL_MATERI_BY_ID",
+  async (id, thunkAPI) => {
+    try {
+      let response = API.get(`/api/materi/${id}`);
+      if ((await response).status === 200) {
+        return (await response).data;
+      } else {
+        return thunkAPI.rejectWithValue(response?.data);
+      }
+    } catch (error) {
+      console.log("Error :", error);
+      return thunkAPI.rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 //NEW JOIN MATERI BY STUDENT------------
+export const joinMateri = createAsyncThunk(
+  "JOIN_MATERI_BY_STUDENT",
+  async (data, thunkAPI) => {
+    try {
+      let response = API.post(`/api/take_materi`, data);
+      if ((await response).status === 200) {
+        return (await response).data;
+      } else {
+        return thunkAPI.rejectWithValue(response?.data);
+      }
+    } catch (error) {
+      console.log("Error", error);
+      return thunkAPI.rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const quitJoinMateri = createAsyncThunk(
+  "QUIT_JOIN_MATERI",
+  async (id, thunkAPI) => {
+    try {
+      let response = API.delete(`/api/take_materi/${id}`);
+      if ((await response).status === 200) {
+        return (await response).data;
+      } else {
+        return thunkAPI.rejectWithValue(response?.data);
+      }
+    } catch (error) {
+      console.log("Error", error);
+      return thunkAPI.rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const getJoinMateri = createAsyncThunk(
+  "GET_JOIN_MATERI",
+  async (thunkAPI) => {
+    try {
+      let response = API.get(
+        `/api/take_materi/user/${localStorage.getItem("user_id")}`
+      );
+      if ((await response).status === 200) {
+        return (await response).data;
+      } else {
+        return thunkAPI.rejectWithValue(response?.data);
+      }
+    } catch (error) {
+      console.log("Error", error);
+      return thunkAPI.rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+//SLICE
 
 export const materiSlice = createSlice({
   name: "materi",
   initialState: {
     materis: [],
+    materi: null,
+    studentMateri: [],
     isSuccessUpdateMateri: false,
     isSuccessAddMateri: false,
     isSuccessDeleteMateri: false,
+    //JOIN
+    isSuccessJoin: false,
+    isLoadingJoin: false,
+    isErrorJoin: false,
+    errorJoinMessage: "",
+    //QUIT
+    isSuccessQuit: false,
+    isLoadingQuit: false,
+    isErrorQuit: false,
+    errorQuitMessage: "",
+
+    //GET JOIN
+    isSuccessGetJoin: false,
+    isErrorGetJoin: false,
+    isLoadingGetJoin: false,
+    errorMessageGetJoin: "",
+
+    //OTHER
     isFetching: false,
     isSuccessFetch: false,
     isErrorFetch: false,
@@ -89,9 +180,11 @@ export const materiSlice = createSlice({
       state.isSuccessUpdateMateri = false;
       state.isSuccessAddMateri = false;
       state.isFetching = false;
-      state.errorMessage = "";
       state.isSuccessFetch = false;
       state.isErrorFetch = false;
+      state.errorMessage = "";
+      state.errorJoinMessage = "";
+      state.errorQuitMessage = false;
       return state;
     },
   },
@@ -151,6 +244,68 @@ export const materiSlice = createSlice({
       state.isErrorFetch = true;
       state.errorMessage = payload?.message;
       state.isSuccessDeleteMateri = false;
+    },
+    [detailMateri.fulfilled]: (state, { payload }) => {
+      state.materi = payload?.data;
+      state.isErrorFetch = false;
+      state.isFetching = false;
+    },
+    [detailMateri.pending]: (state) => {
+      state.isFetching = true;
+    },
+    [detailMateri.rejected]: (state, { payload }) => {
+      state.isErrorFetch = true;
+      state.isFetching = false;
+      state.isSuccessFetch = false;
+      state.errorMessage = payload?.message;
+    },
+
+    //JOIN MATERI BY STUDENT
+    [joinMateri.fulfilled]: (state, { payload }) => {
+      state.isSuccessJoin = true;
+      state.isErrorJoin = false;
+      state.isLoadingJoin = false;
+    },
+    [joinMateri.pending]: (state) => {
+      state.isLoadingJoin = true;
+    },
+    [joinMateri.rejected]: (state, { payload }) => {
+      state.isSuccessJoin = false;
+      state.isLoadingJoin = false;
+      state.isErrorJoin = true;
+      state.errorJoinMessage = payload?.message;
+    },
+
+    //LEAVE MATERI BY STUDENT
+    [quitJoinMateri.fulfilled]: (state, { payload }) => {
+      state.isSuccessQuit = true;
+      state.isErrorQuit = false;
+      state.isLoadingQuit = false;
+    },
+    [quitJoinMateri.pending]: (state) => {
+      state.isLoadingQuit = true;
+    },
+    [quitJoinMateri.rejected]: (state, { payload }) => {
+      state.isSuccessQuiz = false;
+      state.isLoadingQuiz = false;
+      state.isErrorQuiz = true;
+      state.errorQuizMessage = payload?.message;
+    },
+    //GET JOIN
+    [getJoinMateri.fulfilled]: (state, { payload }) => {
+      state.studentMateri = payload?.data;
+      state.isSuccessGetJoin = true;
+      state.isLoadingGetJoin = false;
+      state.isErrorGetJoin = false;
+    },
+    [getJoinMateri.pending]: (state) => {
+      state.isLoadingGetJoin = true;
+    },
+    [getJoinMateri.rejected]: (state, { payload }) => {
+      state.studentMateri = payload?.data;
+      state.isLoadingGetJoin = false;
+      state.isErrorGetJoin = false;
+      state.errorMessageGetJoin = payload?.message;
     },
   },
 });
