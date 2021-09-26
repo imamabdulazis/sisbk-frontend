@@ -29,11 +29,11 @@ const MENU_OPTIONS = [
     icon: personFill,
     linkTo: "/app/profile",
   },
-  {
-    label: "Settings",
-    icon: settings2Fill,
-    linkTo: "/app/setting",
-  },
+  // {
+  //   label: "Settings",
+  //   icon: settings2Fill,
+  //   linkTo: "/app/setting",
+  // },
 ];
 
 // ----------------------------------------------------------------------

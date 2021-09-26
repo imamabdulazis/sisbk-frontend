@@ -252,7 +252,7 @@ function AddContact() {
                       variant="outlined"
                       component="span"
                     >
-                      Choose Files
+                      Pilih Avatar
                     </LoadingButton>
                   </label>
                   <span>{fileState?.name}</span>

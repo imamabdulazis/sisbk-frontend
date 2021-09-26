@@ -8,7 +8,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import DashboardApp from "./pages/DashboardApp";
 import Products from "./pages/Products";
-import Blog from "./pages/Blog";
 import User from "./pages/User";
 import NotFound from "./pages/Page404";
 import Forum from "./pages/Forum";
@@ -46,7 +45,7 @@ const routes = (isLoggedIn, isTeacher) => [
           />
         ),
       },
-      { path: "dashboard", element: <DashboardApp /> },
+      { path: "dashboard", element: <AllMateri /> },
       { path: "user", element: <User /> },
       { path: "kontak", element: <Kontak /> },
       { path: "materi", element: <Materi /> },

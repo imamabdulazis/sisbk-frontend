@@ -89,7 +89,7 @@ function MateriStudent() {
             />
           ))}
           {studentMateri?.length == 0 && (
-            <Typography>Belum terdapat materi</Typography>
+            <Typography padding={3.5}>Belum terdapat materi</Typography>
           )}
         </Grid>
       </Container>

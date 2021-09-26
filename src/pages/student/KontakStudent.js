@@ -1,50 +1,40 @@
-import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useFormik } from "formik";
+import { useEffect, useState } from "react";
 // material
-import { Container, Stack, Typography } from '@material-ui/core';
+import { Container, Stack, Typography } from "@material-ui/core";
 // components
-import Page from '../../components/Page';
+import Page from "../../components/Page";
 import {
   ProductSort,
   ProductList,
   ProductCartWidget,
-  ProductFilterSidebar
-} from '../../components/_dashboard/products';
+  ProductFilterSidebar,
+} from "../../components/_dashboard/products";
 //
-import PRODUCTS from '../../_mocks_/products';
+import PRODUCTS from "../../_mocks_/products";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  contactSelector,
+  fetchAllContact,
+} from "../../state/contact/contactSlice";
+import ContactList from "./ContactList";
 
 // ----------------------------------------------------------------------
 
 export default function KontakStudent() {
-  const [openFilter, setOpenFilter] = useState(false);
+  const dispatch = useDispatch();
+  const {
+    contacts,
+    isFetchingContact,
+    isSuccessContact,
+    isSuccessDeleteContact,
+    isErrorContact,
+    errorMessageContact,
+  } = useSelector(contactSelector);
 
-  const formik = useFormik({
-    initialValues: {
-      gender: '',
-      category: '',
-      colors: '',
-      priceRange: '',
-      rating: ''
-    },
-    onSubmit: () => {
-      setOpenFilter(false);
-    }
-  });
-
-  const { resetForm, handleSubmit } = formik;
-
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
-  };
-
-  const handleCloseFilter = () => {
-    setOpenFilter(false);
-  };
-
-  const handleResetFilter = () => {
-    handleSubmit();
-    resetForm();
-  };
+  useEffect(() => {
+    dispatch(fetchAllContact());
+  }, []);
 
   return (
     <Page title="Dashboard: Products">
@@ -52,7 +42,7 @@ export default function KontakStudent() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           Kontak Guru
         </Typography>
-        <ProductList products={PRODUCTS} />
+        <ContactList contacts={contacts} />
       </Container>
     </Page>
   );
