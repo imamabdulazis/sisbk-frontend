@@ -113,7 +113,7 @@ function MateriCard({
   const [loading, setloading] = useState(false);
 
   const POST_INFO = [
-    { number: 10, icon: heartFill },
+    // { number: 10, icon: heartFill },
     { number: 10, icon: eyeFill },
     // { number: share, icon: shareFill }
   ];
@@ -258,7 +258,7 @@ function MateriCard({
                   sx={{ width: 16, height: 16, mr: 0.5 }}
                 />
                 <Typography variant="caption">
-                  {fShortenNumber(info.number)}
+                  {fShortenNumber(item.view)}
                 </Typography>
               </Box>
             ))}

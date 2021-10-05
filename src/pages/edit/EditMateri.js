@@ -59,7 +59,6 @@ function EditMateri() {
   const RegisterSchema = Yup.object().shape({
     title: Yup.string()
       .min(3, "Terlalu pendek!")
-      .max(50, "Terlalu panjang!")
       .required("Nama wajib di isi"),
     description: Yup.string()
       .min(2, "Terlalu pendek!")
@@ -179,7 +178,7 @@ function EditMateri() {
 
                   <TextField
                     fullWidth
-                    label="Link url"
+                    label="Link url youtube"
                     {...getFieldProps("url")}
                     error={Boolean(touched.url && errors.url)}
                     helperText={touched.url && errors.url}

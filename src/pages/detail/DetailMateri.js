@@ -20,6 +20,8 @@ import {
 import ReactPlayer from "react-player/youtube";
 import { LoadingButton } from "@material-ui/lab";
 import toast from "react-hot-toast";
+import axios from "axios";
+import apiHandler from "../../api/apiHandler";
 
 const VideoStyle = styled("div")({
   position: "relative",
@@ -93,6 +95,11 @@ function DetailMateri() {
     }
   }, [isSuccessJoin, isErrorJoin]);
 
+  //tambah jumlah views
+  useEffect(() => {
+    apiHandler.post(`/api/materi/views/${state.id}`);
+  }, []);
+
   return (
     <Page title="Materi">
       <Container>
@@ -100,7 +107,7 @@ function DetailMateri() {
           {!!materi?.url ? (
             <ReactPlayer
               style={{ width: "60%", top: 0, left: 0 }}
-              url="https://www.youtube.com/watch?v=ysz5S6PUM-U"
+              url={materi.url}
             />
           ) : (
             <Paper variant="outlined">
@@ -110,7 +117,7 @@ function DetailMateri() {
         </VideoStyle>
         <div style={{ height: 10 }} />
         <RowStyleBetween>
-          <Typography variant="h4" noWrap>
+          <Typography variant="h4" flexWrap>
             {materi?.title}
           </Typography>
           {!isTeacher && (
