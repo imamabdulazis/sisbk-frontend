@@ -7,7 +7,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import { styled } from "@material-ui/core/styles";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import Page from "../../components/Page";
@@ -47,6 +47,7 @@ const RowStyleBetween = styled("div")({
 function DetailMateri() {
   const { state } = useLocation();
   const dispatch = useDispatch();
+  const [isTeacher, setIsTeacher] = useState(false);
 
   const {
     materi,
@@ -66,6 +67,7 @@ function DetailMateri() {
 
   useEffect(() => {
     dispatch(detailMateri(state.id));
+    setIsTeacher(localStorage.getItem("role") === "Guru");
   }, []);
 
   const onJoinMateri = () => {
@@ -111,15 +113,17 @@ function DetailMateri() {
           <Typography variant="h4" noWrap>
             {materi?.title}
           </Typography>
-          <LoadingButton
-            onClick={onJoinMateri}
-            size="large"
-            variant="contained"
-            disabled={isLoadingJoin}
-            loading={isLoadingJoin}
-          >
-            Gabung
-          </LoadingButton>
+          {!isTeacher && (
+            <LoadingButton
+              onClick={onJoinMateri}
+              size="large"
+              variant="contained"
+              disabled={isLoadingJoin}
+              loading={isLoadingJoin}
+            >
+              Gabung
+            </LoadingButton>
+          )}
         </RowStyleBetween>
         <Divider style={{ height: 20 }} />
         <div style={{ height: 10 }} />

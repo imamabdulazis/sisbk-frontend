@@ -21,6 +21,13 @@ const RootStyle = styled(Page)(({ theme }) => ({
   },
 }));
 
+const LogoStyle = styled("div")(({ theme }) => ({
+  width: 100,
+  height: 100,
+  display: "flex",
+  alignSelf: "center",
+}));
+
 const SectionStyle = styled(Card)(({ theme }) => ({
   width: "100%",
   maxWidth: 464,
@@ -63,6 +70,12 @@ export default function Login() {
             Hi, Selamat datang
           </Typography>
           <img src="/static/illustrations/illustration_login.png" alt="login" />
+          <Stack direction="row">
+            <LogoStyle>
+              <img src="/static/logo/uty.png" alt="uty" />
+              <img src="/static/logo/smk.jpeg" alt="smk" />
+            </LogoStyle>
+          </Stack>
         </SectionStyle>
       </MHidden>
 
