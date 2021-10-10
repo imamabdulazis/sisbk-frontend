@@ -50,7 +50,7 @@ const TABLE_HEAD = [
   { id: "email", label: "Email", alignRight: false },
   { id: "address", label: "Alamat", alignRight: false },
   { id: "previlage", label: "Role", alignRight: false },
-  { id: "previlage", label: "Status", alignRight: false },
+  // { id: "previlage", label: "Status", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------

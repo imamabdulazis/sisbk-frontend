@@ -1,11 +1,11 @@
 import React from 'react'
 
-function ForumStudent() {
+function EditQuiz() {
   return (
     <div>
-      
+      Edit Quiz
     </div>
   )
 }
 
-export default ForumStudent
+export default EditQuiz

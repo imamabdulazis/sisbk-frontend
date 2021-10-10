@@ -42,7 +42,7 @@ function Forum() {
     setnameUser(localStorage.getItem("user_name"));
   }, []);
   return (
-    <Page title="Dashboard: Forum">
+    <Page title="Forum">
       <Container>
         <Card elevation={0} style={{ minHeight: 650 }}>
           <MainChat name={nameUser} />

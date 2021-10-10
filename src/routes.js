@@ -12,7 +12,6 @@ import Forum from "./pages/Forum";
 import TesPotensi from "./pages/TesPotensi";
 import EditUser from "./pages/edit/EditUser";
 import AddUser from "./pages/add/AddUser";
-import TestStudent from "./pages/student/TestStudent";
 import Beranda from "./pages/student/Beranda";
 import KontakStudent from "./pages/student/KontakStudent";
 import MateriStudent from "./pages/student/MateriStudent";
@@ -26,6 +25,9 @@ import AddMateri from "./pages/add/AddMateri";
 import EditMateri from "./pages/edit/EditMateri";
 import AllMateri from "./pages/student/AllMateri";
 import DetailMateri from "./pages/detail/DetailMateri";
+import QuizStudent from "./pages/student/QuizStudent";
+import AddQuiz from "./pages/add/AddQuiz";
+import EditQuiz from "./pages/edit/EditQuiz";
 
 // ----------------------------------------------------------------------
 
@@ -60,11 +62,14 @@ const routes = (isLoggedIn, isTeacher) => [
       { path: "contact/add", element: <AddContact /> },
       { path: "contact/edit", element: <EditContact /> },
 
+      { path: "quiz/add", element: <AddQuiz /> },
+      { path: "quiz/edit", element: <EditQuiz /> },
+
       // siswa
       { path: "beranda", element: <AllMateri /> },
       { path: "materi_siswa", element: <MateriStudent /> },
       { path: "kontak_siswa", element: <KontakStudent /> },
-      { path: "tes_siswa", element: <TestStudent /> },
+      { path: "tes_siswa", element: <QuizStudent /> },
 
       //profile
       { path: "profile", element: <Profile /> },

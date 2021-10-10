@@ -177,7 +177,7 @@ export default function Kontak() {
   }, [isSuccessDeleteContact]);
 
   return (
-    <Page title="Guru">
+    <Page title="Kontak">
       <Container>
         <Stack
           direction="row"
