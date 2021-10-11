@@ -51,6 +51,8 @@ function AddQuiz() {
   const formik = useFormik({
     initialValues: {
       question: "",
+      correct_answer: "",
+      incorrect_answers: "",
     },
     validationSchema: RegisterSchema,
     onSubmit: (values) => {

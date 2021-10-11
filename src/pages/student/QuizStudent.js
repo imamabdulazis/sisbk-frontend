@@ -1,25 +1,82 @@
-import { Card } from "@material-ui/core";
+import {
+  Card,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  IconButton,
+  Typography,
+  Button,
+} from "@material-ui/core";
+import { styled } from "@material-ui/styles";
+import closeFill from "@iconify/icons-eva/close-fill";
 import React, { Component } from "react";
 import toast from "react-hot-toast";
 import apiHandler from "../../api/apiHandler";
 import QuestionPanel from "../../components/QuestionPanel/QuestionPanel";
+import ResultChart from "./ResultChart";
 // import data from "../../_mocks_/quiz-data.json";
 
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+
+const BootstrapDialogTitle = (props) => {
+  const { children, onClose, ...other } = props;
+
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <closeFill />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+};
 class QuizStudent extends Component {
-  state = {
-    questions: [],
-    current_question: null,
-    current_question_no: 1,
-    total_question_no: 0,
-    progress: 5,
-    score: 0,
-    maxScore: 0,
-    correctAnswered: 0,
-    wrongAnswered: 0,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      questions: [],
+      current_question: null,
+      current_question_no: 1,
+      total_question_no: 0,
+      progress: 5,
+      score: 0,
+      maxScore: 0,
+      correctAnswered: 0,
+      wrongAnswered: 0,
+      openDialog: false,
+    };
+    this.finishAnswer = this.finishAnswer.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+  }
 
   componentDidMount() {
     this.getQuestion();
+  }
+
+  handleClose() {
+    this.setState({
+      openDialog: false,
+    });
+    window.location.reload();
   }
 
   async getQuestion() {
@@ -76,7 +133,9 @@ class QuizStudent extends Component {
   };
 
   finishAnswer(score) {
-    alert(score);
+    this.setState({
+      openDialog: true,
+    });
   }
 
   render() {
@@ -97,6 +156,32 @@ class QuizStudent extends Component {
         ) : (
           ""
         )}
+        <BootstrapDialog
+          onClose={this.handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={this.state.openDialog}
+        >
+          <BootstrapDialogTitle
+            id="customized-dialog-title"
+            onClose={this.handleClose}
+          >
+            Hasil dari jawaban Anda
+          </BootstrapDialogTitle>
+          <DialogContent dividers>
+            <Typography gutterBottom>
+              Dari beberapa pertanyaan yang anda jawab, berikut adalah hasinya
+            </Typography>
+            <Typography gutterBottom>{this.state.score}</Typography>
+            <ResultChart
+              data={[this.state.correctAnswered, this.state.wrongAnswered]}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={this.handleClose}>
+              Tutup
+            </Button>
+          </DialogActions>
+        </BootstrapDialog>
       </div>
     );
   }
