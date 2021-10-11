@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import homeFill from "@iconify/icons-eva/home-fill";
 import personFill from "@iconify/icons-eva/person-fill";
 import settings2Fill from "@iconify/icons-eva/settings-2-fill";
@@ -18,17 +18,18 @@ import {
 // components
 import MenuPopover from "../../components/MenuPopover";
 //
-import account from "../../_mocks_/account";
+// import account from "../../_mocks_/account";
 import { useNavigate } from "react-router";
+import apiHandler from "../../api/apiHandler";
 
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
-  {
-    label: "Profile",
-    icon: personFill,
-    linkTo: "/app/profile",
-  },
+  // {
+  //   label: "Profile",
+  //   icon: personFill,
+  //   linkTo: "/app/profile",
+  // },
   // {
   //   label: "Settings",
   //   icon: settings2Fill,
@@ -42,6 +43,7 @@ export default function AccountPopover() {
   const navigation = useNavigate();
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const [account, setAccount] = useState();
 
   const handleOpen = () => {
     setOpen(true);
@@ -53,6 +55,19 @@ export default function AccountPopover() {
   const onLogout = () => {
     localStorage.removeItem("token");
     navigation("/login", { replace: true });
+  };
+
+  useEffect(() => {
+    getAccount();
+  }, []);
+
+  const getAccount = async () => {
+    let response = await apiHandler.get(
+      `/api/user/${localStorage.getItem("user_id")}`
+    );
+    if (response.status == 200) {
+      setAccount(response.data?.data);
+    }
   };
 
   return (
@@ -77,7 +92,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={account?.image_url} alt="photoURL" />
       </IconButton>
 
       <MenuPopover
@@ -88,10 +103,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {account.displayName}
+            {account?.name}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {account.email}
+            {account?.email}
           </Typography>
         </Box>
 

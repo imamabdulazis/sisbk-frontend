@@ -72,8 +72,8 @@ const routes = (isLoggedIn, isTeacher) => [
       { path: "tes_siswa", element: <QuizStudent /> },
 
       //profile
-      { path: "profile", element: <Profile /> },
-      { path: "setting", element: <Setting /> },
+      // { path: "profile", element: <Profile /> },
+      // { path: "setting", element: <Setting /> },
 
       //detail
       { path: "detail_materi", element: <DetailMateri /> },
