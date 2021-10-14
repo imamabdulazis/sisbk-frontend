@@ -94,7 +94,7 @@ export default function Register() {
 
           <RegisterForm />
 
-          <Typography
+          {/* <Typography
             variant="body2"
             align="center"
             sx={{ color: "text.secondary", mt: 3 }}
@@ -108,7 +108,7 @@ export default function Register() {
               Privacy Policy
             </Link>
             .
-          </Typography>
+          </Typography> */}
 
           <MHidden width="smUp">
             <Typography variant="subtitle2" sx={{ mt: 3, textAlign: "center" }}>
