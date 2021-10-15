@@ -1,3 +1,4 @@
+import React from "react";
 import { Icon } from "@iconify/react";
 import plusFill from "@iconify/icons-eva/plus-fill";
 import { Link as RouterLink } from "react-router-dom";
@@ -29,6 +30,7 @@ const SORT_OPTIONS = [
 
 function AllMateri() {
   const dispatch = useDispatch();
+  const [loading, setLoading] = React.useState(true);
 
   const {
     materis,

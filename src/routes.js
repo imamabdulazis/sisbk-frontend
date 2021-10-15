@@ -41,6 +41,7 @@ const routes = (isLoggedIn, isTeacher) => [
         element: (
           <Navigate
             to={isTeacher ? "/app/dashboard" : "/app/beranda"}
+            key={document.location.href}
             replace
           />
         ),
