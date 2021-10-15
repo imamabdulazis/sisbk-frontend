@@ -25,13 +25,13 @@ function MainChat(props) {
     <ChatEngineWrapper>
       <ChatSocket
         projectID="0535de57-3586-4aed-a156-edc6c4912ef6"
-        chatID="62338"
-        chatAccessKey="ca-13520be7-64ef-4359-8075-cd9f38fd823f"
+        chatID="63354"
+        chatAccessKey="ca-6f0197df-d78a-4a88-ae89-f4ca493dc9c1"
         senderUsername={
           user?.previlage == "Guru" ? `${user?.name} - Guru` : user?.name
         }
       />
-      <ChatFeed activeChat={"57815"} />
+      <ChatFeed activeChat={"63354"} />
     </ChatEngineWrapper>
   );
 }
