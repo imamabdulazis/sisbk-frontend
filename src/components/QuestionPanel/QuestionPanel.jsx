@@ -92,7 +92,7 @@ export default function QuestionPanel({
               variant="h5"
               color="textSecondary"
               component="p"
-              className={classes.question}
+              className={classes?.question}
             >
               {decodeURIComponent(question["question"])}
             </Typography>

@@ -124,7 +124,7 @@ function AddUser() {
 
   const uploadImage = (value) => {
     setloading(true);
-    const url = " http://localhost:4000";
+    const url = "https://sisbk-backend.herokuapp.com";
     const formData = new FormData();
     formData.append("file", value, value?.name);
     formData.append("folder", "users");

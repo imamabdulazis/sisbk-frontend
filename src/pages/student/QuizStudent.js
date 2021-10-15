@@ -83,7 +83,7 @@ class QuizStudent extends Component {
     let response = await apiHandler.get("/api/quiz");
     if (response.status == 200) {
       this.setState({
-        questions: response.data.data,
+        questions: response.data.data ?? [],
         total_question_no: response.data?.data?.length,
         current_question: response.data.data[0],
       });
