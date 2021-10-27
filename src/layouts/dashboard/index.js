@@ -14,7 +14,7 @@ const APP_BAR_DESKTOP = 92;
 const RootStyle = styled("div")({
   display: "flex",
   minHeight: "100%",
-  // overflow: "hidden",
+  overflow: "hidden",
   backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/sisteminformasibk.appspot.com/o/bg%2Fbg.jpeg?alt=media&token=65862a03-89c1-46b4-8168-f66ae3967d9e)`,
 });
 
