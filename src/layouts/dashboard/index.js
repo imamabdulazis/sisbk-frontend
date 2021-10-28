@@ -16,6 +16,7 @@ const RootStyle = styled("div")({
   minHeight: "100%",
   overflow: "hidden",
   backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/sisteminformasibk.appspot.com/o/bg%2Fbg.jpeg?alt=media&token=65862a03-89c1-46b4-8168-f66ae3967d9e)`,
+  backgroundAttachment: "fixed",
 });
 
 const MainStyle = styled("div")(({ theme }) => ({
