@@ -287,7 +287,7 @@ function AddMateri() {
                     size="large"
                     type="submit"
                     variant="contained"
-                    disabled={loading}
+                    disabled={loading || loadingFile}
                     loading={isFetching}
                     startIcon={<Icon icon={saveFill} />}
                   >
