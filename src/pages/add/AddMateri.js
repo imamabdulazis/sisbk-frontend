@@ -38,11 +38,16 @@ import {
 function AddMateri() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isTeacher, setisTeacher] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+
   const [fileState, setfileState] = useState(null);
   const [fileUrl, setfileUrl] = useState(null);
+
+  const [newFileState, setNewFileState] = useState(null);
+  const [newFileUri, setNewFileUri] = useState(null);
+
   const [loading, setloading] = useState(false);
+  const [loadingFile, setloadingFile] = useState(false);
+
   const {
     materis,
     isSuccessUpdateMateri,
@@ -68,6 +73,7 @@ function AddMateri() {
     initialValues: {
       title: "",
       url: "",
+      file: "",
       description: "",
     },
     validationSchema: RegisterSchema,
@@ -79,6 +85,7 @@ function AddMateri() {
         description: values.description,
         type: values.url != null ? 1 : 2,
         thumbnail: fileUrl,
+        file: newFileUri,
       };
       onSubmit(data);
     },
@@ -111,6 +118,11 @@ function AddMateri() {
   const onChangeFile = (event) => {
     setfileState(event.target.files[0]);
     uploadImage(event.target.files[0]);
+  };
+
+  const onChangeFileState = (event) => {
+    setNewFileState(event.target.files[0]);
+    uploadFileNew(event.target.files[0]);
   };
 
   const uploadImage = (value) => {
@@ -146,6 +158,42 @@ function AddMateri() {
         setloading(false);
         setfileUrl(null);
         toast.error("Gagal upload foto");
+      });
+  };
+
+  const uploadFileNew = (value) => {
+    setloadingFile(true);
+    const url = "https://sisbk-backend.herokuapp.com";
+    const formData = new FormData();
+    formData.append("file", value, value?.name);
+    formData.append("folder", "materi");
+    let headers = {
+      "Content-Type": "multipart/form-data",
+      Accept: "application/json",
+      Authorization: "Bearer " + window.localStorage.getItem("token"),
+    };
+    axios({
+      method: "POST",
+      url: `${url}/api/file`,
+      data: formData,
+      headers: headers,
+      timeout: 10000,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          setloadingFile(false);
+          setNewFileUri(res.data.url);
+          toast.success("Berhasil upload file");
+        } else {
+          setloadingFile(false);
+          setNewFileUri(null);
+          toast.error("Gagal upload file");
+        }
+      })
+      .catch((err) => {
+        setloadingFile(false);
+        setNewFileUri(null);
+        toast.error("Gagal upload file");
       });
   };
 
@@ -214,6 +262,25 @@ function AddMateri() {
                     </LoadingButton>
                   </label>
                   <span>{fileState?.name}</span>
+
+                  <label htmlFor="btn-upload-file">
+                    <input
+                      id="btn-upload-file"
+                      name="btn-upload-file"
+                      style={{ display: "none" }}
+                      type="file"
+                      onChange={onChangeFileState}
+                    />
+                    <LoadingButton
+                      loading={loadingFile}
+                      className="btn-choose"
+                      variant="outlined"
+                      component="span"
+                    >
+                      Unggah file maximal 1
+                    </LoadingButton>
+                  </label>
+                  <span>{newFileState?.name}</span>
 
                   <LoadingButton
                     fullWidth

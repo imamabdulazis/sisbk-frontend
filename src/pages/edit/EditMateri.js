@@ -42,9 +42,15 @@ function EditMateri() {
   const { state } = useLocation();
   const [isTeacher, setisTeacher] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
   const [fileState, setfileState] = useState(null);
   const [fileUrl, setfileUrl] = useState(null);
+
+  const [newFileState, setNewFileState] = useState(null);
+  const [newFileUri, setNewFileUri] = useState(null);
+
   const [loading, setloading] = useState(false);
+  const [loadingFile, setloadingFile] = useState(false);
   const {
     materis,
     isSuccessUpdateMateri,
@@ -57,9 +63,7 @@ function EditMateri() {
   } = useSelector(materiSelector);
 
   const RegisterSchema = Yup.object().shape({
-    title: Yup.string()
-      .min(3, "Terlalu pendek!")
-      .required("Nama wajib di isi"),
+    title: Yup.string().min(3, "Terlalu pendek!").required("Nama wajib di isi"),
     description: Yup.string()
       .min(2, "Terlalu pendek!")
       .required("Gelar wajib di isi"),
@@ -69,6 +73,7 @@ function EditMateri() {
     initialValues: {
       title: state.title,
       url: state.url,
+      file: state.file,
       description: state.description,
     },
     validationSchema: RegisterSchema,
@@ -79,6 +84,7 @@ function EditMateri() {
         type: state.type,
         description: values.description,
         thumbnail: fileUrl,
+        file: newFileUri,
       };
       onSubmit(data);
     },
@@ -111,6 +117,11 @@ function EditMateri() {
   const onChangeFile = (event) => {
     setfileState(event.target.files[0]);
     uploadImage(event.target.files[0]);
+  };
+
+  const onChangeFileState = (event) => {
+    setNewFileState(event.target.files[0]);
+    uploadFileNew(event.target.files[0]);
   };
 
   const uploadImage = (value) => {
@@ -146,6 +157,42 @@ function EditMateri() {
         setloading(false);
         setfileUrl(null);
         toast.error("Gagal upload foto");
+      });
+  };
+
+  const uploadFileNew = (value) => {
+    setloadingFile(true);
+    const url = "https://sisbk-backend.herokuapp.com";
+    const formData = new FormData();
+    formData.append("file", value, value?.name);
+    formData.append("folder", "materi");
+    let headers = {
+      "Content-Type": "multipart/form-data",
+      Accept: "application/json",
+      Authorization: "Bearer " + window.localStorage.getItem("token"),
+    };
+    axios({
+      method: "POST",
+      url: `${url}/api/file`,
+      data: formData,
+      headers: headers,
+      timeout: 10000,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          setloadingFile(false);
+          setNewFileUri(res.data.url);
+          toast.success("Berhasil upload file");
+        } else {
+          setloadingFile(false);
+          setNewFileUri(null);
+          toast.error("Gagal upload file");
+        }
+      })
+      .catch((err) => {
+        setloadingFile(false);
+        setNewFileUri(null);
+        toast.error("Gagal upload file");
       });
   };
 
@@ -215,12 +262,31 @@ function EditMateri() {
                   </label>
                   <span>{fileState?.name}</span>
 
+                  <label htmlFor="btn-upload-file">
+                    <input
+                      id="btn-upload-file"
+                      name="btn-upload-file"
+                      style={{ display: "none" }}
+                      type="file"
+                      onChange={onChangeFileState}
+                    />
+                    <LoadingButton
+                      loading={loadingFile}
+                      className="btn-choose"
+                      variant="outlined"
+                      component="span"
+                    >
+                      Unggah file maximal 1
+                    </LoadingButton>
+                  </label>
+                  <span>{newFileState?.name}</span>
+
                   <LoadingButton
                     fullWidth
                     size="large"
                     type="submit"
                     variant="contained"
-                    disabled={loading}
+                    disabled={loading || loadingFile}
                     loading={isFetching}
                     startIcon={<Icon icon={saveFill} />}
                   >

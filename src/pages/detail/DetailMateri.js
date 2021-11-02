@@ -132,6 +132,11 @@ function DetailMateri() {
             </LoadingButton>
           )}
         </RowStyleBetween>
+        {materi?.file && (
+          <a href={`${materi?.file}`} download>
+            Download file disini
+          </a>
+        )}
         <Divider style={{ height: 20 }} />
         <div style={{ height: 10 }} />
         <RowStyle>
