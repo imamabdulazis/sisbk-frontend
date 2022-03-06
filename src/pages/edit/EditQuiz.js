@@ -77,7 +77,7 @@ function EditQuiz() {
     if (response.status === 200) {
       setloading(false);
       toast.success("Berhasil simpan data");
-      navigate("/app/tes", { replace: true });
+      navigate(-1);
     } else {
       toast.error("Terjadi kesalahan");
       setloading(false);

@@ -29,41 +29,28 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import apiHandler from "../../api/apiHandler";
 
-function AddQuiz() {
+function AddQuizType() {
   const navigate = useNavigate();
-  const { state } = useLocation();
 
   const [loading, setloading] = useState(false);
 
   const [isTrue, setiSTrue] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
-    question: Yup.string()
-      .min(5, "Terlalu pendek!")
-      .required("Pertanyaan wajib di isi wajib di isi"),
-    correct_answer: Yup.string()
-      .min(1, "Terlalu pendek!")
-      .required("Pertanyaan wajib di isi wajib di isi"),
-    incorrect_answers: Yup.string()
-      .min(1, "Terlalu pendek!")
-      .required("Pertanyaan wajib di isi wajib di isi"),
+    title: Yup.string()
+      .min(3, "Terlalu pendek!")
+      .required("Nama Kategori wajib di isi wajib di isi"),
   });
-
-  console.log(state.title);
 
   const formik = useFormik({
     initialValues: {
-      question: "",
-      correct_answer: "",
-      incorrect_answers: "",
+      title: "",
     },
     validationSchema: RegisterSchema,
     onSubmit: (values) => {
       let data = {
-        quiz_type_id: state.id,
-        question: values.question,
-        correct_answer: values.correct_answer,
-        incorrect_answers: values.incorrect_answers,
+        user_id: localStorage.getItem("user_id"),
+        title: values.title,
       };
       onSubmit(data);
     },
@@ -76,11 +63,11 @@ function AddQuiz() {
 
   const addQuiz = async (data) => {
     setloading(true);
-    let response = await apiHandler.post(`api/quiz`, data);
+    let response = await apiHandler.post(`api/quiz_type`, data);
     if (response.status === 200) {
       setloading(false);
       toast.success("Berhasil simpan data");
-      navigate(-1);
+      navigate("/app/tes", { replace: true });
     } else {
       toast.error("Terjadi kesalahan");
       setloading(false);
@@ -97,7 +84,7 @@ function AddQuiz() {
           mb={5}
         >
           <Typography variant="h4" gutterBottom>
-            Tambah Pertanyaan Tes
+            Tambah Kategori Tes
           </Typography>
         </Stack>
         <Card>
@@ -108,32 +95,10 @@ function AddQuiz() {
                 <Stack spacing={4}>
                   <TextField
                     fullWidth
-                    label="Pertanyaan"
-                    {...getFieldProps("question")}
-                    error={Boolean(touched.question && errors.question)}
-                    helperText={touched.question && errors.question}
-                  />
-
-                  <TextField
-                    fullWidth
-                    label="Jawaban Benar"
-                    {...getFieldProps("correct_answer")}
-                    error={Boolean(
-                      touched.correct_answer && errors.correct_answer
-                    )}
-                    helperText={touched.correct_answer && errors.correct_answer}
-                  />
-
-                  <TextField
-                    fullWidth
-                    label="Jawaban Salah"
-                    {...getFieldProps("incorrect_answers")}
-                    error={Boolean(
-                      touched.incorrect_answers && errors.incorrect_answers
-                    )}
-                    helperText={
-                      touched.incorrect_answers && errors.incorrect_answers
-                    }
+                    label="Title"
+                    {...getFieldProps("title")}
+                    error={Boolean(touched.title && errors.title)}
+                    helperText={touched.title && errors.title}
                   />
 
                   <LoadingButton
@@ -157,4 +122,4 @@ function AddQuiz() {
   );
 }
 
-export default AddQuiz;
+export default AddQuizType;

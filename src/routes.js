@@ -28,6 +28,9 @@ import DetailMateri from "./pages/detail/DetailMateri";
 import QuizStudent from "./pages/student/QuizStudent";
 import AddQuiz from "./pages/add/AddQuiz";
 import EditQuiz from "./pages/edit/EditQuiz";
+import AddQuizType from "./pages/add/AddQuizCategory";
+import EditQuizType from "./pages/edit/EditQuizType";
+import QuizDataByCategory from "./pages/detail/QuizDataByCategory";
 
 // ----------------------------------------------------------------------
 
@@ -64,7 +67,9 @@ const routes = (isLoggedIn, isTeacher) => [
       { path: "contact/edit", element: <EditContact /> },
 
       { path: "quiz/add", element: <AddQuiz /> },
+      { path: "quiz_type/add", element: <AddQuizType /> },
       { path: "quiz/edit", element: <EditQuiz /> },
+      { path: "quiz_type/edit", element: <EditQuizType /> },
 
       // siswa
       { path: "beranda", element: <AllMateri /> },
@@ -78,6 +83,7 @@ const routes = (isLoggedIn, isTeacher) => [
 
       //detail
       { path: "detail_materi", element: <DetailMateri /> },
+      { path: "detail_quiz_category", element: <QuizDataByCategory /> },
     ],
   },
   {

@@ -257,9 +257,7 @@ export default function Materi() {
                           <TableCell align="left">{users.name}</TableCell>
                           {/* <TableCell align="left">{description}</TableCell> */}
                           <TableCell align="left">
-                            {moment(updated_at, "DD-MM-YYYY").format(
-                              "DD MMM yyyy"
-                            )}
+                            {moment(updated_at).format("DD MMM yyyy")}
                             {/* {`${updated_at} oke`} */}
                           </TableCell>
                           {/* <TableCell align="left">

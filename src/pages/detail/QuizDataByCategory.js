@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 import { sentenceCase } from "change-case";
 import { useEffect, useState } from "react";
 import plusFill from "@iconify/icons-eva/plus-fill";
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 // material
 import {
   Card,
@@ -21,30 +21,29 @@ import {
   TablePagination,
 } from "@material-ui/core";
 // components
-import Page from "../components/Page";
-import Label from "../components/Label";
-import Scrollbar from "../components/Scrollbar";
-import SearchNotFound from "../components/SearchNotFound";
+import Page from "../../components/Page";
+import Label from "../../components/Label";
+import Scrollbar from "../../components/Scrollbar";
+import SearchNotFound from "../../components/SearchNotFound";
 import {
   UserListHead,
   UserListToolbar,
   UserMoreMenu,
-} from "../components/_dashboard/user";
+} from "../../components/_dashboard/user";
 //
 //REDUX
 import { useSelector, useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import moment from "moment";
-import apiHandler from "../api/apiHandler";
-import QuizCategoryMenu from "../components/_dashboard/user/QuizCategoryMenu";
+import apiHandler from "../../api/apiHandler";
 
 // import USERLIST from "../_mocks_/user";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "title", label: "Title", alignRight: false },
-  { id: "users", label: "Creator", alignRight: false },
+  { id: "question", label: "Pertanyaan", alignRight: false },
+  { id: "correct_answer", label: "Jawaban", alignRight: false },
   { id: "updated_at", label: "Update", alignRight: false },
 ];
 
@@ -83,8 +82,9 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function TesPotensi() {
+function QuizDataByCategory() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -172,7 +172,7 @@ function TesPotensi() {
   }, [isSuccessDeleteQuiz]);
 
   const getAllQuiz = async () => {
-    let response = await apiHandler.get("api/quiz_type");
+    let response = await apiHandler.get(`api/quiz/${location?.state?.id}`);
     if (response.status === 200) {
       setquiz(response.data?.data);
     }
@@ -180,7 +180,7 @@ function TesPotensi() {
 
   const deleteMateri = async (id) => {
     setisSuccessDeleteQuiz(false);
-    let response = await apiHandler.delete(`/api/quiz_type/${id}`);
+    let response = await apiHandler.delete(`/api/quiz/${id}`);
     if (response.status == 200) {
       setisSuccessDeleteQuiz(true);
     }
@@ -196,12 +196,11 @@ function TesPotensi() {
           mb={5}
         >
           <Typography variant="h4" gutterBottom>
-            Tes Potensi Kategori
+            Tes - {location?.state?.title}
           </Typography>
           <Button
+            onClick={() => navigate("/app/quiz/add", { state: location.state })}
             variant="contained"
-            component={RouterLink}
-            to="/app/quiz_type/add"
             startIcon={<Icon icon={plusFill} />}
           >
             Tambah
@@ -231,10 +230,18 @@ function TesPotensi() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, title, users, updated_at } = row;
+                      const { id, question, correct_answer, updated_at } = row;
+                      const isItemSelected = selected.indexOf(question) !== -1;
 
                       return (
-                        <TableRow hover key={id} tabIndex={-1} role="checkbox">
+                        <TableRow
+                          hover
+                          key={id}
+                          tabIndex={-1}
+                          role="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
                           <TableCell padding="checkbox">
                             {/* <Checkbox
                           checked={isItemSelected}
@@ -247,10 +254,12 @@ function TesPotensi() {
                               alignItems="center"
                               spacing={2}
                             >
-                              {title}
+                              <Typography variant="subtitle2" noWrap>
+                                {question}
+                              </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{users.name}</TableCell>
+                          <TableCell align="left">{correct_answer}</TableCell>
                           {/* <TableCell align="left">{description}</TableCell> */}
                           <TableCell align="left">
                             {moment(updated_at).format("DD MMM yyyy")}
@@ -271,8 +280,8 @@ function TesPotensi() {
                       </TableCell> */}
 
                           <TableCell align="right">
-                            <QuizCategoryMenu
-                              route="/app/quiz_type/edit"
+                            <UserMoreMenu
+                              route="/app/quiz/edit"
                               item={row}
                               onDelete={onDelete}
                             />
@@ -314,4 +323,4 @@ function TesPotensi() {
   );
 }
 
-export default TesPotensi;
+export default QuizDataByCategory;

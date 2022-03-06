@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import editFill from "@iconify/icons-eva/edit-fill";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import trash2Outline from "@iconify/icons-eva/trash-2-outline";
+import bookOpenFill from "@iconify/icons-eva/book-open-fill";
 import moreVerticalFill from "@iconify/icons-eva/more-vertical-fill";
 // material
 import {
@@ -15,7 +16,7 @@ import {
 
 // ----------------------------------------------------------------------
 
-export default function UserMoreMenu(props) {
+export default function QuizCategoryMenu(props) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -24,6 +25,10 @@ export default function UserMoreMenu(props) {
     props.onDelete(props.item);
     setIsOpen(false);
   }, [props]);
+
+  const onDetail = () => {
+    navigate("/app/detail_quiz_category", { state: props.item });
+  };
 
   return (
     <>
@@ -41,6 +46,16 @@ export default function UserMoreMenu(props) {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
+        <MenuItem onClick={onDetail} sx={{ color: "text.secondary" }}>
+          <ListItemIcon>
+            <Icon icon={bookOpenFill} width={24} height={24} />
+          </ListItemIcon>
+          <ListItemText
+            primary="Detail Soal"
+            primaryTypographyProps={{ variant: "body2" }}
+          />
+        </MenuItem>
+
         <MenuItem
           onClick={() => {
             navigate(props.route, { state: props.item });
