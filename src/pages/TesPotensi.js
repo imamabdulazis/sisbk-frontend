@@ -196,7 +196,7 @@ function TesPotensi() {
           mb={5}
         >
           <Typography variant="h4" gutterBottom>
-            Tes Potensi Kategori
+            Kategori Tes
           </Typography>
           <Button
             variant="contained"

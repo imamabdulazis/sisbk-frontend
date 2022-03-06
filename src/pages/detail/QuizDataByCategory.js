@@ -196,7 +196,7 @@ function QuizDataByCategory() {
           mb={5}
         >
           <Typography variant="h4" gutterBottom>
-            Tes - {location?.state?.title}
+            Soal Tes - {location?.state?.title}
           </Typography>
           <Button
             onClick={() => navigate("/app/quiz/add", { state: location.state })}
