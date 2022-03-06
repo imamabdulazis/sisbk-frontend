@@ -31,6 +31,7 @@ import EditQuiz from "./pages/edit/EditQuiz";
 import AddQuizType from "./pages/add/AddQuizCategory";
 import EditQuizType from "./pages/edit/EditQuizType";
 import QuizDataByCategory from "./pages/detail/QuizDataByCategory";
+import CategoryQuiz from "./pages/student/CategoryQuiz";
 
 // ----------------------------------------------------------------------
 
@@ -75,7 +76,8 @@ const routes = (isLoggedIn, isTeacher) => [
       { path: "beranda", element: <AllMateri /> },
       { path: "materi_siswa", element: <MateriStudent /> },
       { path: "kontak_siswa", element: <KontakStudent /> },
-      { path: "tes_siswa", element: <QuizStudent /> },
+      { path: "tes_siswa/:id", element: <QuizStudent /> },
+      { path: "tes_category", element: <CategoryQuiz /> },
 
       //profile
       // { path: "profile", element: <Profile /> },

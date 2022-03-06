@@ -12,7 +12,7 @@ export const addNewContact = createAsyncThunk(
         return thunkAPI.rejectWithValue(response.data);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -29,7 +29,7 @@ export const fetchAllContact = createAsyncThunk(
         return thunkAPI.rejectWithValue(response.data);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -46,7 +46,7 @@ export const updateContactByID = createAsyncThunk(
         return thunkAPI.rejectWithValue(response.data);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -63,7 +63,7 @@ export const deleteContactByID = createAsyncThunk(
         return thunkAPI.rejectWithValue(response.data);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }

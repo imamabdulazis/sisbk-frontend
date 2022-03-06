@@ -13,7 +13,7 @@ export const signupUser = createAsyncThunk(
         return thunkAPI.rejectWithValue(data);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -35,7 +35,7 @@ export const loginUser = createAsyncThunk(
         return thunkAPI.rejectWithValue(data);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -52,7 +52,7 @@ export const fetchUserById = createAsyncThunk(
         return thunkAPI.rejectWithValue(id);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -69,7 +69,7 @@ export const fetchAllUser = createAsyncThunk(
         return thunkAPI.rejectWithValue(response);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -95,7 +95,7 @@ export const updateUserById = createAsyncThunk(
   "USER_UPDATE_BY_ID",
   async ({ id, data }, thunkAPI) => {
     try {
-      console.log("DATAAA");
+      // console.log("DATAAA");
       let response = API.put(`/api/user/profile/${id}`, data);
       if ((await response).status === 200) {
         return (await response).data;
@@ -136,7 +136,7 @@ export const userSlice = createSlice({
   extraReducers: {
     // register
     [signupUser.fulfilled]: (state, { payload }) => {
-      console.log(payload);
+      // console.log(payload);
       state.isFetching = false;
       state.isSuccess = true;
     },
@@ -166,7 +166,7 @@ export const userSlice = createSlice({
     },
     // fetch by id
     [fetchUserById.fulfilled]: (state, { payload }) => {
-      console.log(payload);
+      // console.log(payload);
       state.user = payload.data;
       state.name = payload.data.name;
       state.isFetching = false;
@@ -182,7 +182,7 @@ export const userSlice = createSlice({
     },
     // get all
     [fetchAllUser.fulfilled]: (state, { payload }) => {
-      console.log(payload);
+      // console.log(payload);
       state.allUser = payload.data;
       state.isFetching = false;
       state.isError = false;

@@ -49,7 +49,7 @@ function AddQuiz() {
       .required("Pertanyaan wajib di isi wajib di isi"),
   });
 
-  console.log(state.title);
+  // console.log(state.title);
 
   const formik = useFormik({
     initialValues: {

@@ -11,10 +11,11 @@ import {
 import { styled } from "@material-ui/styles";
 import closeFill from "@iconify/icons-eva/close-fill";
 import React, { Component } from "react";
-import toast from "react-hot-toast";
-import apiHandler from "../../api/apiHandler";
 import QuestionPanel from "../../components/QuestionPanel/QuestionPanel";
 import ResultChart from "./ResultChart";
+import { withParams, withRouter } from "../../hocs";
+import apiHandler from "../../api/apiHandler";
+import toast from "react-hot-toast";
 // import data from "../../_mocks_/quiz-data.json";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -63,6 +64,7 @@ class QuizStudent extends Component {
       correctAnswered: 0,
       wrongAnswered: 0,
       openDialog: false,
+      data: {},
     };
     this.finishAnswer = this.finishAnswer.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -70,6 +72,18 @@ class QuizStudent extends Component {
 
   componentDidMount() {
     this.getQuestion();
+    this.getDetailCategory();
+  }
+
+  async getDetailCategory() {
+    let response = await apiHandler.get(
+      `/api/quiz_type/${this.props.match?.params?.id}`
+    );
+    if (response.status === 200) {
+      this.setState({
+        data: response.data.data,
+      });
+    }
   }
 
   handleClose() {
@@ -80,8 +94,10 @@ class QuizStudent extends Component {
   }
 
   async getQuestion() {
-    let response = await apiHandler.get("/api/quiz");
-    if (response.status == 200) {
+    let response = await apiHandler.get(
+      `/api/quiz/${this.props.match?.params?.id}`
+    );
+    if (response.status === 200) {
       this.setState({
         questions: response.data.data ?? [],
         total_question_no: response.data?.data?.length,
@@ -107,7 +123,7 @@ class QuizStudent extends Component {
     const {
       current_question,
       current_question_no,
-      correctAnswered: correctAnswered,
+      correctAnswered,
       wrongAnswered,
       total_question_no,
     } = this.state;
@@ -141,6 +157,9 @@ class QuizStudent extends Component {
   render() {
     return (
       <div className="question-panel-wrapper">
+        <Typography style={{ marginBottom: 30 }} variant="h4" noWrap>
+          {this.state.data?.title}
+        </Typography>
         {this.state.current_question !== null && this.state.questions ? (
           <QuestionPanel
             question={this.state.current_question}
@@ -187,4 +206,4 @@ class QuizStudent extends Component {
   }
 }
 
-export default QuizStudent;
+export default withRouter(QuizStudent);

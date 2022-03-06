@@ -17,7 +17,7 @@ function MainChat(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(user);
+    // // console.log(user);
     dispatch(fetchUserById(localStorage.getItem("user_id")));
   }, []);
 

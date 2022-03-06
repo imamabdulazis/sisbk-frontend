@@ -13,7 +13,7 @@ export const addMateri = createAsyncThunk(
         return thunkAPI.rejectWithValue(response?.data);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -30,7 +30,7 @@ export const getAllMateri = createAsyncThunk(
         return thunkAPI.rejectWithValue(response.data);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -47,7 +47,7 @@ export const updateMateri = createAsyncThunk(
         return thunkAPI.rejectWithValue(data);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -64,7 +64,7 @@ export const deleteMateri = createAsyncThunk(
         return thunkAPI.rejectWithValue(response.data);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -81,7 +81,7 @@ export const detailMateri = createAsyncThunk(
         return thunkAPI.rejectWithValue(response?.data);
       }
     } catch (error) {
-      console.log("Error :", error);
+      // console.log("Error :", error);
       return thunkAPI.rejectWithValue(error?.response?.data);
     }
   }
@@ -99,7 +99,7 @@ export const joinMateri = createAsyncThunk(
         return thunkAPI.rejectWithValue(response?.data);
       }
     } catch (error) {
-      console.log("Error", error);
+      // console.log("Error", error);
       return thunkAPI.rejectWithValue(error?.response?.data);
     }
   }
@@ -116,7 +116,7 @@ export const quitJoinMateri = createAsyncThunk(
         return thunkAPI.rejectWithValue(response?.data);
       }
     } catch (error) {
-      console.log("Error", error);
+      // console.log("Error", error);
       return thunkAPI.rejectWithValue(error?.response?.data);
     }
   }
@@ -135,7 +135,7 @@ export const getJoinMateri = createAsyncThunk(
         return thunkAPI.rejectWithValue(response?.data);
       }
     } catch (error) {
-      console.log("Error", error);
+      // console.log("Error", error);
       return thunkAPI.rejectWithValue(error?.response?.data);
     }
   }

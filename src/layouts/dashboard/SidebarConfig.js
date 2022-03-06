@@ -66,7 +66,7 @@ export const sidebarConfigStudent = [
   },
   {
     title: "tes",
-    path: "/app/tes_siswa",
+    path: "/app/tes_category",
     icon: getIcon(fileTextFill),
   },
 ];
