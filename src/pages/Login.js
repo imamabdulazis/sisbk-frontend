@@ -22,8 +22,9 @@ const RootStyle = styled(Page)(({ theme }) => ({
 }));
 
 const LogoStyle = styled("div")(({ theme }) => ({
-  width: 100,
-  height: 100,
+  width: 150,
+  height: 150,
+  marginLeft: 30,
   display: "flex",
   alignSelf: "center",
 }));
@@ -73,7 +74,7 @@ export default function Login() {
           <Stack direction="row">
             <LogoStyle>
               <img src="/static/logo/uty.png" alt="uty" />
-              <img src="/static/logo/smk.jpeg" alt="smk" />
+              {/* <img src="/static/logo/smk.jpeg" alt="smk" /> */}
             </LogoStyle>
           </Stack>
         </SectionStyle>
